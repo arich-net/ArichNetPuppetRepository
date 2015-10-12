@@ -1,0 +1,8 @@
+#
+# MANAGED ROUTES FOR DEVICE <%=ifname%>
+# (C) NTT E Storage Engineering
+#
+
+<%routes.each do |rt| -%>
+<%=rt['net']%> via <%=rt['nh']%>
+<%end-%>

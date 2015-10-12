@@ -1,0 +1,19 @@
+#
+# Apache Passenger config
+#
+LoadModule passenger_module <%= scope.lookupvar 'apache::params::mod_passenger_location' %>                                                                                 
+PassengerRoot <%= scope.lookupvar 'apache::params::passenger_root' %>                                                                                      
+PassengerRuby /usr/bin/ruby1.8
+
+# Recommended settings
+PassengerHighPerformance on
+PassengerUseGlobalQueue on
+
+# Control number of application instances, typically 1.5x the number of proc cores.
+PassengerMaxPoolSize 6
+
+# Restart ruby process after handling specific number of request to resolve memory leak
+PassengerMaxRequests 4000
+
+# Shutdown idle passenger instances after 30 min
+PassengerPoolIdleTime 1800

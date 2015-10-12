@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'json'
+require '/usr/local/ntte/nexus/checklists-sab/checklist_scripts/lib/sysapi.rb'
+
+# Nexus requires an output to identify what data to send to the script
+if ARGV.length < 1
+  puts("#{$0} systemName\r\n")
+  exit 1
+end
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: check-users [options]"
+  opts.on('s', '--systemname SYSTEMNAME', 'System Name') { |v| options[:systemname] = v }
+end.parse!
+
+sysapi = Sysapi.new(options[:systemname], File.basename($0, ".rb"))
+sysapi_execute = sysapi.execute()
+
+puts sysapi_execute["data"].map { |msg| "-- #{msg}\n" }.join unless sysapi_execute["data"].empty?
+if sysapi_execute["status"]
+  exit 0 
+else
+  exit 1 
+end

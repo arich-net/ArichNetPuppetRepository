@@ -1,0 +1,21 @@
+[gerrit]
+  basePath = git
+  canonicalWebUrl = http://<%= @server_name_real %>/
+[database]
+  type = H2
+  database = db/ReviewDB
+[auth]
+  type = <%= @auth_method %>
+  emailFormat = {0}@atlasit.com
+[sendemail]
+  smtpServer = localhost
+[container]
+  user = gerrit2
+[sshd]
+  listenAddress = *:29418
+[httpd]
+  listenUrl = http://*:8118/
+[cache]
+  directory = cache
+[gitweb]
+  cgi = <%= @cgi_real %>

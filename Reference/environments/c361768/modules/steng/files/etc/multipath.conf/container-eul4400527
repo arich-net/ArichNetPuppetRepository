@@ -1,0 +1,57 @@
+defaults {
+	user_friendly_names yes
+	find_multipaths yes
+}
+
+multipaths {
+	multipath {
+		wwid                    3600601603f0033004c3fca29b681e211
+		alias                   1_thin_CustPremDS_0
+	}
+	multipath {
+		wwid                    3600601603f00330058bf7cfa8282e211
+		alias                   0_thin_NoisyDS_0
+	}
+	multipath {
+		wwid                    3600601603f003300b0957b31b681e211
+		alias                   1_thin_CustPremDS_1
+	}
+	multipath {				  
+		wwid                    3600601603f003300e62597816edde211
+		alias                   2_thin_CustStdDS_1
+	}
+	multipath {
+		wwid                    3600601603f003300e00d9a5b6edde211
+		alias                   2_thin_CustStdDS_0
+	}
+	multipath {
+		wwid                    36006016087d03200a349dffac008e311
+		alias                   4_thin_NBackupMedia_1
+	}
+	multipath {
+		wwid                    36006016087d03200e8a99700638ae211
+		alias                   0_thin_Catalog_0
+	}
+}
+
+blacklist {
+	devnode "^(ram|raw|loop|fd|md|dm-|sr|scd|st)[0-9]*"
+	devnode "^hd[a-z][[0-9]*]"
+	devnode "^cciss!c[0-9]d[0-9]*[p[0-9]*]"
+	device {
+		vendor "DGC"
+		product "LUNZ"
+	}
+}
+
+devices {
+	device {
+		vendor                  "DGC"
+		product                 "*"
+		prio                    alua
+		path_grouping_policy    group_by_prio
+		features                "1 queue_if_no_path"
+		failback                immediate
+		hardware_handler        "1 alua"
+	}
+}

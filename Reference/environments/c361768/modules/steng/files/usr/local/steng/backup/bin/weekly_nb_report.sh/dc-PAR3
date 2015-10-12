@@ -1,0 +1,33 @@
+#!/bin/bash
+# NetBackup script to collect weekly capacity values.
+# Usage: weekly_nb_report.sh
+
+LOG_PATH=/usr/local/steng/backup/bin/logs/weekly
+LOG_FILE=$LOG_PATH/weekly_report_`date "+%Y%m%d%H%M%S"`.log
+LOG_WEEK_PATH=/usr/openv/var/global/weekly_reports
+LOG_WEEK=$LOG_WEEK_PATH/weekly_report_`date "+%Y%m%d%H%M%S"`.log
+REPORT_RETAIN=30
+
+echo "Removing logpath... " | tee -a $LOG_WEEK
+rm -rf $LOG_PATH | tee -a $LOG_WEEK
+echo "Creating directory... " | tee -a $LOG_WEEK
+mkdir $LOG_PATH | tee -a $LOG_WEEK
+
+echo "/usr/local/steng/backup/bin/TapeCount.pl Scratch" | tee -a $LOG_WEEK
+/usr/local/steng/backup/bin/TapeCount.pl Scratch > $LOG_FILE
+echo "/usr/local/steng/backup/bin/TapesInLib.pl 0" | tee -a $LOG_WEEK
+/usr/local/steng/backup/bin/TapesInLib.pl 0 >> $LOG_FILE
+echo "/usr/local/steng/backup/bin/TapeUsage.pl P" | tee -a $LOG_WEEK
+/usr/local/steng/backup/bin/TapeUsage.pl P >> $LOG_FILE
+
+echo "Deleting old logs... " | tee -a $LOG_WEEK
+find $LOG_WEEK_PATH -mtime +$REPORT_RETAIN -exec rm {} \;
+
+BODY_MESSAGE="Report for weekly capacity"
+SUBJECT=`hostname`": Weekly Netbackup Capacity Report"
+SENDER=`hostname`@`hostname`.eu.verio.net
+
+echo "Sending report: " $LOG_FILE  | tee -a $LOG_WEEK
+echo $BODY_MESSAGE | mailx -s "$SUBJECT" -r "$SENDER" -a $LOG_FILE alessandro.meloni@ntt.eu,sergi.pellise@ntt.eu | tee -a $LOG_WEEK
+exit $?
+

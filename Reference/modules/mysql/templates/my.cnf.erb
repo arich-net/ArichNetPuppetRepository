@@ -1,0 +1,48 @@
+# General configuration file for MYSQL
+
+[client]
+port = <%= port %>
+socket = /var/run/mysqld/mysqld.sock
+
+[mysqld_safe]
+socket = /var/run/mysqld/mysqld.sock
+nice = 0
+
+[mysqld]
+user = mysql
+socket = /var/run/mysqld/mysqld.sock
+port = <%= port %>
+basedir = /usr
+datadir = /var/lib/mysql
+tmpdir = /tmp
+skip-external-locking
+bind-address = <%= bind_address %>
+key_buffer = 16M
+max_allowed_packet = 16M
+thread_stack = 192K
+thread_cache_size = 8
+myisam-recover = BACKUP
+query_cache_limit = 1M
+query_cache_size = 16M
+# Both location gets rotated by the cronjob.
+# Be aware that this log type is a performance killer.
+# As of 5.1 you can enable the log at runtime!
+#general_log_file        = /var/log/mysql/mysql.log
+#general_log             = 1
+log_error = /var/log/mysql/error.log
+expire_logs_days = 10
+max_binlog_size = 100M
+innodb_file_per_table
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet = 16M
+
+[mysql]
+
+[isamchk]
+key_buffer = 16M
+
+!includedir /etc/mysql/conf.d/
+

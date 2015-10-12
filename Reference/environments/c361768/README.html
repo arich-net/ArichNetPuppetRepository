@@ -1,0 +1,232 @@
+<h1>STENG PUPPET USAGE</h1>
+
+<h2>Puppet concepts</h2>
+
+<p>Puppet master is working in service-london. The puppet files are stored in a Subversion respository at
+https://cfgweb.ntteo.net/svn/eng/puppet . This puppet setup is managed by Systems Engineering. They have a
+lot of puppet code developed and, with time, this will become a service offered to our customers.</p>
+
+<p>The Systems Eng team has achieved the multi-tenancy by means of a puppet concept, the <em>environments</em>. Every customer wanting to 
+use puppet will have an environent to store his own puppet code. Also a lot of modules (re-usable components) are installed in
+the global repository so customers will be also able to use them.  That being said, given the amount of time we have, it has 
+been decided to limit the dependencies with the Systems Engineering team so we will not use any of the modules they provide.</p>
+
+<p>The puppet directory structure is:</p>
+
+<ul>
+<li>PUPPETROOT
+<ul>
+<li>manifests: </li>
+<li>modules: modules available to everybody</li>
+<li>environments: customer dedicated environments
+<ul>
+<li>c336792: Environment for <strong>Systems Eng</strong>. The number is the customer number in NEXUS.</li>
+<li>c361768: Environment for <strong>Storage Eng</strong>. <strong>WE ONLY MODIFY FILES FROM THIS DIRECTORY DOWN</strong></li>
+<li>manifests: puppet entry point is here: site.pp</li>
+<li>modules: our own modules</li>
+<li>templates: our templates</li>
+<li>files: our files</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h3>Puppet execution</h3>
+
+<p>The puppet agent in installed by default on our build but, there is no scheduled execution and this is done on purpose. The puppet
+agent needs to be executed by hand once we have uploaded (commited) the changes to the subversion.</p>
+
+<h2>How to work</h2>
+
+<p>Being puppet code in a SVN repository, the way to work is always the same.</p>
+
+<ol>
+<li>Ask Systems engineering to be granted write permission for the puppet environment c361768 <strong>and read-only for everything else</strong>.</li>
+<li><p>Get our working-copy (check-out): </p>
+
+<p>svn co https://cfgweb.ntteo.net/svn/eng/puppet/trunk directory-to-store-the-working-copy</p></li>
+<li><p>Change anything you want in the <strong>c361768</strong> subdirectory. The directory structure in here matches the one seen above</p></li>
+<li>Test anything we want</li>
+<li><p>When we are ready, commit the changes, <strong>only the c361768 subdirectory</strong> </p>
+
+<p>svn commit path-to-c361768</p></li>
+<li><p>Go to the servers we want to apply changes and execute</p>
+
+<p>puppet agent --onetime --no-daemonize --no-splay --verbose</p>
+
+<ul>
+<li>If you want to test before</li>
+</ul>
+
+<p>puppet agent --onetime --no-daemonize --no-splay --verbose --noop</p></li>
+<li><p>If you want to continue working after some time, don't forget to get the latest updates from the repository. Maybe some
+other colleague has commited changes also. From your working copy root dir, execute:</p>
+
+<p>svn update</p></li>
+</ol>
+
+<h2>General systems build and configuration</h2>
+
+<p>One of the purposes of introducing puppet is to make the system easier to configure after the <em>build</em>. Our main goal is that, once
+a system has finished the O/S install as per the NTTE tools, the rest of the configuration is done automatically via puppet. That
+being said, there are specific points that are very dangerous to put under puppet management or, at least, to do it in a traditional 
+way.  </p>
+
+<p>Stages:</p>
+
+<ol>
+<li>Initial: before the server is O/S built. 
+<ol>
+<li>All relevant data will need to be collected at this point: PIP, OOB IP, hostname, container, etc.</li>
+</ol></li>
+<li>Built: once the server has undergone the build process. It has an O/S and the default configuration
+<ol>
+<li>The transition from Built to the next stage may be very simple or quite complex.</li>
+<li>For general servers, this will imply just to update the puppet environment in the puppet configuration file.</li>
+<li>In general, we need to ensure the device being built is able to access the Internet once the build process has finished. 
+The puppet server is accessed through public networks.</li>
+</ol></li>
+<li>Prod: once all the server has all the relevant configuration managed by puppet. Once again, It will need access 
+to the puppet server to have its configuration managed since, as we said before, the puppet server is accessed through public networks.</li>
+</ol>
+
+<h1>PUPPET-MANAGED BACKUP SERVERS</h1>
+
+<p>The backup servers have a number of specificities which make them very special when it comes to manage them:</p>
+
+<ul>
+<li>All of them use an specific O/S version which is not going to change in the next years. We don't need any configuration to
+be portable as of now. </li>
+<li>We have an specific build image in place that is is not going to change. We are completely aware of the status of the system
+after the build.</li>
+<li>The hostname of them will need to stay even though the container changes. Container and hostname, therefore, are not 
+necessarily the same in these systems.</li>
+<li>For backup migrations, it may meed to make these systems to change their IP addressing at some point of their life.</li>
+<li>We want absolute control of the packages installed in every system. Because of this, we are going to forbid any system update</li>
+</ul>
+
+<p>Let's see how the stages will look like for these devices.</p>
+
+<h2>Initial stage</h2>
+
+<p>In this stage, the server is physically provisioned, powered on, etc. Our only concern here should be to:</p>
+
+<ul>
+<li>Have the server and the needed container and host names. They can be different. Internet access is, as always, needed</li>
+<li>Have a couple of IP addresses: PIP and OOB</li>
+<li>Have them located in a zone which internet connectivity </li>
+</ul>
+
+<h2>Built stage</h2>
+
+<p>This phase is a requisite from building a backup server.</p>
+
+<ul>
+<li>Needs to be built using a fixed distribution NTTE-Backup</li>
+<li>Needs to have internet connectivity</li>
+</ul>
+
+<p>Once the server is built the <em>standard way</em>, we can proceed </p>
+
+<p>Steps</p>
+
+<ol>
+<li>Ensure all the server configuration is updated in the puppet repository</li>
+<li>Ensure the server is registered in the RHN</li>
+<li><p>On the server we just built</p>
+
+<ol>
+<li>Ensure there are 6 ethernet devices
+<ul>
+<li>eth0 + eth1: Integrated controllers</li>
+<li>eth2 + eth3: Emulex card on PCI3</li>
+<li>eth4 + eth5: Emulex card on PCI4</li>
+<li>modify the /etc/udev/rules.d/70-persistent-net-rules to ensure this works</li>
+<li>Write down the mac addresses for them in a note in NEXUS</li>
+</ul></li>
+<li>Download the disk creation scripts</li>
+<li>For a master: https://rebus.ntteo.net/util/masterdisks.sh</li>
+<li>For a media: https://rebus.ntteo.net/util/mediadisks.sh</li>
+<li>Modify the /etc/puppet/puppet.conf file to point to the environment c361768 (our environment)</li>
+<li>Execute</li>
+</ol>
+
+<p><p>puppet agent --onetime --no-daemonize --no-splay --verbose</p></li>
+</ol>
+This should</p>
+
+<ol>
+<li>Download the software via rsync from steng.ntteo.net and put it on /opt/NTTE/software</li>
+<li>Modify the hosts</li>
+<li>Modify the hostname (beware point before)
+<ul>
+<li>And reload it</li>
+</ul></li>
+<li>Modify the resolv.conf</li>
+<li>Modify the network configuration (including routes). Without restarting it</li>
+<li>Manage the services below
+<ul>
+<li>ntp</li>
+<li>sshd</li>
+<li>smtp</li>
+<li>users?</li>
+<li>groups?</li>
+</ul></li>
+<li>Copy all scripts to /usr/local/NTTE/steng</li>
+<li>Disable the yum rhnplugin </li>
+<li>Add the rhn repository to yum http://rebus.ntteo.net/repos/backup/prod</li>
+<li>Modify the sysctl.conf</li>
+<li>Modify the kernel boot options</li>
+<li>Modify the limits.conf</li>
+</ol>
+
+<p>So, after executing puppet</p>
+
+<ol>
+<li>halt the server</li>
+<li>reconfigure the VLANS</li>
+<li>Boot the server. It should boot right stright away the the proper network configuration and hostname.</li>
+</ol>
+
+<h2>Prod stage</h2>
+
+<p>This is business as usual but no config change will be done directly. Only the points below will be manually managed:</p>
+
+<ul>
+<li>Software updates (yum ...)</li>
+<li>Disk management (create,delete of partitions, disks, etc)</li>
+<li>NB tasks</li>
+</ul>
+
+<h2>Software updates</h2>
+
+<p>Software updates will be managed by ourselves. Main steps</p>
+
+<ol>
+<li><p>For every server</p>
+
+<ol>
+<li>We will ensure the box is registered</li>
+<li>We will disable the redhat plugin from the configuration</li>
+</ol></li>
+<li><p>For a specific server (in the lab?)</p>
+
+<ol>
+<li>We will install the download-only plugin in one of the servers or in the lab. This makes yum to download the packages, 
+not install them</li>
+<li>We will install the createrepo plugin the same way</li>
+</ol></li>
+<li><p>In this server, once every few months we will:</p>
+
+<ol>
+<li>Enable the redhat plugin</li>
+<li>Execute an update with downloadonly. This will download all the packages</li>
+<li>Create / update a repository with these packages. Publish it in rebus.ntteo.net as rebus.ntteo.net/repos/backup/test</li>
+<li>This will mean we have a repository with the packages we need to update the systems</li>
+</ol></li>
+<li><p>Once this is tested, we will ensure all the servers have rebus.ntteo.net/repos/backup/prod as an authorized repository</p></li>
+<li>We will copy rebus.ntteo.net/repos/backup/test to rebus.ntteo.net/repost/backup/prod</li>
+<li>We will <em>yum update</em> all of them </li>
+<li>All the servers will have all the same packages</li>
+</ol>
+
+<p>Important to note: no package will be installed unless it comes from this repository.</p>

@@ -1,0 +1,14 @@
+
+#
+# fschange monitors
+#
+[fschange:<%= path %>]
+<% if index != :undef -%>
+index = <%= index %>
+<% end -%>
+<% if signedaudit != :undef -%>
+signedaudit = <%= signedaudit %>
+<% end -%>
+<% if sourcetype != :undef -%>
+sourcetype = <%= sourcetype %>
+<% end -%>

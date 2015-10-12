@@ -1,0 +1,12 @@
+name          'NTTEAM-pypiserver'
+version       '0.1.1'
+source        'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.pypiserver'
+author        'NTTEAM'
+summary       'Puppet module for pypiserver based Pypi mirror.'
+license       'Apache 2.0'
+source        'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.pypiserver'
+project_page  'https://confluence.ntt.eu/display/devel/Home'
+
+dependency 'puppetlabs/apache', '>= 0.8.0'
+dependency 'counsyl/python'
+dependency 'NTTEAM/na_stdlib'

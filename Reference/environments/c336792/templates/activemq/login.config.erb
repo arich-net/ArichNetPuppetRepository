@@ -1,0 +1,25 @@
+
+LdapConfiguration { 
+    org.apache.activemq.jaas.PropertiesLoginModule sufficient
+        debug=true
+        org.apache.activemq.jaas.properties.user="users.properties"
+        org.apache.activemq.jaas.properties.group="groups.properties";
+   org.apache.activemq.jaas.LDAPLoginModule sufficient
+       debug=true 
+       initialContextFactory=com.sun.jndi.ldap.LdapCtxFactory 
+       connectionURL="ldap://192.168.231.26:636" 
+       connectionUsername="cn=NTTEO LDAP Service,cn=Users,dc=ntteng,dc=ntt,dc=eu" 
+       connectionPassword="zujs6XUdkF"
+       connectionProtocol="ssl"
+       authentication=simple
+       forceBindingLogin="false"
+       userBase="ou=NTT EO,dc=ntteng,dc=ntt,dc=eu" 
+       userSearchMatching="(uid={0})"
+       userSearchSubtree=true
+       userRoleName="memberOf"
+       roleBase="ou=NTT EO,dc=ntteng,dc=ntt,dc=eu"
+       roleName="cn"
+       roleSearchMatching="member:1.2.840.113556.1.4.1941:={0}"
+       roleSearchSubtree=true
+       ; 
+};

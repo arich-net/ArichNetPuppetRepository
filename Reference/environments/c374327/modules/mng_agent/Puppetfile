@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+forge 'https://forgeapi.puppetlabs.com'
+
+mod 'puppetlabs/mcollective',
+  :git => 'https://github.com/ntteurope/puppetlabs-mcollective.git',
+  :ref => 'refactor/hardcoded_configuration'
+
+mod 'NTTEAM/na_stdlib',
+  :git => 'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.na_stdlib'
+
+mod 'NTTEAM/cleng',
+  :git => 'git@packages.atlasit.com:puppet.cleng.git',
+  :ref => 'feature/AllowUnauthenticated'
+
+mod 'NTTEAM/na_stdlib',
+  :git => 'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.na_stdlib'
+
+mod 'NTTEAM/na_mcollective',
+  :git => 'git@packages.atlasit.com:puppet.na_mcollective.git',
+  :ref => 'feature/Ubuntu_14.04'
+
+mod 'reidmv/yamlfile',
+  :git => 'https://github.com/reidmv/puppet-module-yamlfile.git'
+
+mod 'puppetlabs/firewall'

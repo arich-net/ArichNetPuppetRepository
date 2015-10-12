@@ -1,0 +1,23 @@
+name          'NTTEAM-mng_server'
+version       '1.1.0'
+source        'ssh://gerrit.devcl.am.ntt.eu:29418/ntteam.puppet.mng_server'
+author        'NTTEAM'
+summary       'monitoring-ng server Puppet module'
+license       'Copyright (C) 2014 NTEAM'
+project_page  'https://confluence.ntt.eu/display/AMMONIT/AM%3A+Monitoring+Home'
+
+dependency 'puppetlabs/apache'
+dependency 'puppetlabs/concat'
+dependency 'puppetlabs/firewall'
+dependency 'puppetlabs/mcollective'
+dependency 'puppetlabs/postgresql'
+dependency 'puppetlabs/rabbitmq'
+
+dependency 'garethr/riemann'
+dependency 'ispavailability/graphite'
+dependency 'plathrop/supervisor'
+
+dependency 'NTTEAM/na_activemq'
+dependency 'NTTEAM/cleng'
+dependency 'NTTEAM/na_stdlib'
+dependency 'NTTEAM/grafana'

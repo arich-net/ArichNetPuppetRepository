@@ -1,0 +1,10 @@
+# Limits for Netbackup 7.5 
+# (C) NTT E STO ENG
+# According to http://www.symantec.com/business/support/index?page=content&id=TECH167095
+
+
+*               soft    core           unlimited
+*               hard    core           unlimited
+*               soft    nofile         8000
+*               hard    nofile         65535
+

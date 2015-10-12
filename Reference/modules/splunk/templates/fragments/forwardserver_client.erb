@@ -1,0 +1,9 @@
+
+[tcpout]
+defaultGroup = <%= host %>_<%= port %>
+disabled = false
+
+[tcpout:<%= host %>_<%= port %>]
+server = <%= host %>:<%= port %>
+
+[tcpout-server://<%= host %>:<%= port %>]

@@ -1,0 +1,52 @@
+#
+# PuppetMaster Passenger VHOST
+#
+Listen 8140
+<VirtualHost *:8140>
+  ServerName <%= clientcert %>
+  ServerAlias <%= clientcert %>
+ 
+  SSLEngine On
+  SSLProtocol -ALL +SSLv3 +TLSv1
+  SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+  SSLCertificateFile /var/lib/puppet/ssl/certs/<%= clientcert %>.pem
+  SSLCertificateKeyFile /var/lib/puppet/ssl/private_keys/<%= clientcert %>.pem
+  SSLCertificateChainFile /var/lib/puppet/ssl/certs/ca.pem
+  SSLCACertificateFile /var/lib/puppet/ssl/certs/ca.pem
+  <% if puppet_is_ca_server then -%>
+  SSLCARevocationFile     /var/lib/puppet/ssl/ca/ca_crl.pem
+  <% end -%>
+  SSLVerifyClient optional
+  SSLOptions +StdEnvVars
+  SSLVerifyDepth 1
+  
+  <% if puppet_is_ca_server == false then %>
+  ProxyRequests On
+  SSLProxyEngine On
+  <Proxy *>
+    Order allow,deny
+    Allow from all
+    #Allow from .en.verio.net
+  </Proxy>
+
+  ProxyPassMatch ^(/.*?)/(report.*?|certificate.*?|file_bucket_file.*?)/(.*)$ https://puppeteer.londen01.infra.ntt.eu:8140
+  ProxyPassReverse ^(/.*?)/(report.*?|certificate.*?|file_bucket_file.*?)/(.*)$ https://puppeteer.londen01.infra.ntt.eu:8140
+   
+  <% end %>
+  
+  #RackBaseURI /
+  
+  RackAutoDetect On
+  RailsAutoDetect On
+  DocumentRoot <%= scope.lookupvar 'puppet::params::passenger_app_root' %>/public
+  PassengerAppRoot <%= scope.lookupvar 'puppet::params::passenger_app_root' %>
+  
+  <Directory <%= scope.lookupvar 'puppet::params::passenger_app_root' %>/public/>
+  	Options None
+    AllowOverride None
+    Order allow,deny
+    allow from all
+    Options -MultiViews
+  </Directory>
+
+</VirtualHost>

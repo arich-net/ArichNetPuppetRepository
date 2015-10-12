@@ -1,0 +1,24 @@
+Defaults:localops !requiretty
+
+localops ALL=(root) NOPASSWD: /home/localops/scripts/available_media
+localops ALL=(root) NOPASSWD: /home/localops/scripts/bg_out_cleaner
+localops ALL=(root) NOPASSWD: /home/localops/scripts/check_job_db
+localops ALL=(root) NOPASSWD: /home/localops/scripts/cleaning_tape_status
+localops ALL=(root) NOPASSWD: /home/localops/scripts/client_checks
+localops ALL=(root) NOPASSWD: /home/localops/scripts/dbbackup_check
+localops ALL=(root) NOPASSWD: /home/localops/scripts/front_ip_check
+localops ALL=(root) NOPASSWD: /home/localops/scripts/hostsfile_checks
+localops ALL=(root) NOPASSWD: /home/localops/scripts/it_backups_last_week
+localops ALL=(root) NOPASSWD: /home/localops/scripts/sched_sanity_check
+localops ALL=(root) NOPASSWD: /home/localops/scripts/stale_configs
+localops ALL=(root) NOPASSWD: /home/localops/scripts/suspend_expire_check
+localops ALL=(root) NOPASSWD: /home/localops/scripts/the_nb_java_gui_sucks
+localops ALL=(root) NOPASSWD: /home/localops/scripts/pend_req_check
+localops ALL=(root) NOPASSWD: /home/localops/scripts/drivewatch.sh
+localops ALL=(root) NOPASSWD: /home/localops/scripts/hostsfile_checks
+localops ALL=(root) NOPASSWD: /home/localops/scripts/stale_configs_media
+
+localops ALL=(root) NOPASSWD: /bin/mount * /home/localops/mnt/*
+localops ALL=(root) NOPASSWD: /bin/umount /home/localops/mnt/*
+localops ALL=(root) NOPASSWD: sudoedit /home/localops/mnt/*
+localops ALL=(root) NOPASSWD: /bin/cp * /home/localops/mnt/*

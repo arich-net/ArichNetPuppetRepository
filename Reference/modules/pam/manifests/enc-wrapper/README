@@ -1,0 +1,37 @@
+# README
+#
+# *** This is a wrapper purely used for ENC, and we can migrate back to param class when the ENC GUI,
+# *** (foreman/dashboard) supports them.
+#
+# This directory contains all the wrapper classes to use specifically with ENC (foreman/dashboard)
+#
+# This is due to ENC's yaml output not containing hashes of parameters when a parameterized class is used.
+#
+# Because we are heavily using param classes since 2.6.x and they are considerbly beneficial I am 
+# keeping them and will wait for the ENC and foreman/dashboard GUI to support them.
+#
+# Wrappers will contain a param class and pull variables from top scope:
+#
+# We will try and keep variable naming unique to its original i.e
+# class -> puppet::client already contains a param variable "$puppet_environment".
+# our wrapper class puppet::enc-wrapper::client will reference the now top scope variable "$::puppet-client-puppet_enviroment"
+#
+# All top scope variables used in the wrapper classes will need to be documented in the wrapper class,
+# these then get used in the ENC as smart variables (foreman) or parameters (dashboard).
+#
+# class <module-name>::<enc-dir-name>::<class-name> {
+#  class { 'puppet::client':
+#   puppet_environment => $::<class-name>-<variable-name>,
+#  }
+# }
+#
+# Example:
+# class puppet::enc-wrapper::client {
+#  class { 'puppet::client':
+#	puppet_environment => $::puppet-client-puppet_environment,
+#	}
+# }
+#
+# REF:
+# http://theforeman.org/issues/832
+# http://projects.puppetlabs.com/issues/5045

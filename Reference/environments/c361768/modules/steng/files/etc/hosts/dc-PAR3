@@ -1,0 +1,22 @@
+#
+# Internet host table
+# Do not change this initial block
+# Local directions:
+::1     localhost
+127.0.0.1       localhost.localdomain localhost
+
+# Backup Servers:
+83.217.251.67   eul2000512.eu.verio.net eul2000512 eul2000512-pip
+10.20.0.5       eul2000512.oob.eu.verio.net eul2000512-oob
+
+# AD servers
+192.168.46.251 evw0000020 evw0000020.ntteng.ntt.eu
+192.168.231.26 evw3300026 evw3300026.ntteng.ntt.eu
+192.168.77.46 evw0300021 evw0300021.ntteng.ntt.eu
+192.168.231.8 evw3300025 evw3300025.ntteng.ntt.eu
+# opscenter
+192.168.231.22  evw3300592.oob.eu.verio.net
+
+# mailhost
+213.130.46.253  mailhost
+

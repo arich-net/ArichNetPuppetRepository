@@ -1,0 +1,22 @@
+notification :off
+
+pattern = 'spec/{classes,defines,unit,functions,hosts,integration}/**/*_spec.rb'
+
+guard 'rspec', all_after_pass: true, cmd: "rspec --drb --pattern #{pattern}" do
+  watch(%r{^manifests\/(.+)\.pp$}) do |m|
+    manifest = m[-1]
+    if manifest == 'init'
+      'spec/classes/pypiserver_spec.rb'
+    else
+      "spec/classes/#{manifest}_spec.rb"
+    end
+  end
+
+  watch(%r{lib/puppet/parser/functions/(.+).rb}) do |m|
+    "spec/functions/#{m[-1]}_spec.rb"
+  end
+
+  watch(%r{^spec/spec_helper.rb$}) { 'spec' }
+  watch(%r{(spec/classes/.+_spec\.rb)}) { |m| m }
+  watch(%r{(spec/functions/.+_spec\.rb)}) { |m| m }
+end

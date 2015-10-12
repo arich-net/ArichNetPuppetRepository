@@ -1,0 +1,39 @@
+# Freshclam config
+
+DatabaseOwner clamav
+UpdateLogFile /var/log/clamav/freshclam.log
+LogVerbose false
+LogSyslog false
+LogFacility LOG_LOCAL6
+LogFileMaxSize 0
+LogTime true
+Foreground false
+Debug false
+MaxAttempts 5
+DatabaseDirectory /var/lib/clamav
+DNSDatabaseInfo current.cvd.clamav.net
+AllowSupplementaryGroups false
+PidFile /var/run/clamav/freshclam.pid
+ConnectTimeout 30
+ReceiveTimeout 30
+TestDatabases yes
+ScriptedUpdates yes
+CompressLocalDatabase no
+Bytecode true
+# Check for new database 24 times a day
+Checks 24
+DatabaseMirror db.local.clamav.net
+DatabaseMirror database.clamav.net
+<% if clamav_proxy_server != :undef -%>
+# Proxy Settings
+HTTPProxyServer <%= clamav_proxy_server %>
+<% end -%>
+<% if clamav_proxy_port != :undef -%>
+HTTPProxyPort <%= clamav_proxy_port %>
+<% end -%>
+<% if clamav_proxy_username != :undef -%>
+HTTPProxyUsername <%= clamav_proxy_username %>
+<% end -%>
+<% if clamav_proxy_password != :undef -%>
+HTTPProxyPassword <%= clamav_proxy_password %>
+<% end -%>

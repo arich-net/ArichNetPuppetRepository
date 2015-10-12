@@ -1,0 +1,12 @@
+
+#
+# Log monitors
+#
+[monitor://<%= path %>]
+disabled = <%= log_disabled %>
+<% if index != :undef -%>
+index = <%= index %>
+<% end -%>
+<% if sourcetype != :undef -%>
+sourcetype = <%= sourcetype %>
+<% end -%>

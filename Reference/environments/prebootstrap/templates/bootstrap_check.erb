@@ -1,0 +1,213 @@
+#!/usr/bin/env ruby
+#
+# Bootstrap check 
+#   - Displays output to the user during provision process
+#	- Calls finishbuild in the event of an error, a successful build is handled via mcbootstrap.
+# 
+# TODO
+#
+#
+require 'pp'
+require 'facter'
+require 'mcollective'
+require 'net/http'
+require 'net/https'
+
+$version = "1.0"
+$hostname = Facter.value("hostname")
+$operatingsystem = Facter.value("operatingsystem")
+$operatingsystemrelease = Facter.value("operatingsystemrelease")
+$architecture = Facter.value("architecture")
+$bootstrap_enable_file = '/etc/mcollective/bootstrap.enable'
+$bootstrap_lock_file = '/etc/mcollective/bootstrap.lock'
+$bootstrap_success = false
+$bootstrap_finished = false
+$puppet_last_run_summary = "/var/lib/puppet/state/last_run_summary.yaml"
+$sysapi_host = "puppeteer.londen01.infra.ntt.eu"
+$sysapi_port = "4443"
+$sysapi_path = "/sysapi"
+
+$lock_timer = 600 
+$progress_timer = 1800.to_f
+$tty = [ "/dev/tty1", "/dev/tty2", "/dev/tty3", "/dev/tty4", "/dev/tty5", "/dev/tty6", "/dev/tty7" ]
+
+sleep 5
+`chvt 7`
+
+def close_session
+  $io.close
+end
+
+def print_line(line, with_header=false)
+  $tty.each do |tty|
+    fd = IO.sysopen(tty, "w")
+    io = IO.new(fd, "w")
+    if with_header then
+      io.puts clear_screen
+      io.puts print_header
+    end
+    io.puts "  #{line}"
+  end
+end
+
+def clear_screen
+  return "\e[H\e[2J"
+end
+
+def bootstrap_enabled?
+  File.exist?($bootstrap_enable_file)
+end
+
+def bootstrap_locked?
+  File.exist?($bootstrap_lock_file)
+end
+
+def bootstrap_finished?
+  $bootstrap_finished
+end
+
+def bootstrap_success?
+  $bootstrap_success
+end
+
+def sysapi_session
+  https = Net::HTTP.new($sysapi_host, $sysapi_port)
+  https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  https.use_ssl = true
+  return https
+end
+
+def sysapi_query(method, params=nil)
+  if params
+    req = Net::HTTP::Post.new("#{$sysapi_path}/#{method}")
+  else
+    req = Net::HTTP::Get.new("#{$sysapi_path}/#{method}")
+  end
+  
+  req.set_form_data( params ) unless params.nil?
+  res = sysapi_session.start {|https|
+    https.request(req)
+  }
+  res_body = JSON.parse(res.body)
+
+  # Perhaps display to the user if we cannot query successfully
+  #raise "Status #{res.code} from SysAPI" unless res.code == "200"
+  
+  return true, res_body
+end
+
+def sysapi_update_log(msg, type=:info)
+  status, update_log = sysapi_query("builds/#{$hostname}/log/update", { :msg => msg, :type => type })
+  return update_log
+end
+
+def sysapi_finishbuild(build_successful, log=nil)
+  status, finish_build = sysapi_query("builds/#{$hostname}/finishbuild", { :build_successful => build_successful, :log => log })
+  return finish_build
+end
+
+def puppet_check_last_run_failures
+  # return nil = error
+  puppet_failure_count = nil
+  if File.exist?($puppet_last_run_summary) then
+    puppet_last_run = IO.read($puppet_last_run_summary)
+    puppet_failure_str = puppet_last_run.match(/failure: (\d+)/)
+    if ! puppet_failure_str.nil?
+      puppet_failure_count = puppet_failure_str[1].to_i
+    end
+  end
+  return puppet_failure_count
+end
+
+def print_header
+  facts = "#{$hostname} : #{$operatingsystem} #{$operatingsystemrelease} #{$architecture}"
+  border1 = "#" * facts.length
+  border2 = "-" * facts.length
+  header = "  #{border1}####\n"\
+            "  # NTTE Bootstrap v#{$version}\n"\
+            "  # #{facts}\n"\
+            "  # #{border2}--\n"\
+            "  # Bootstrap enabled: #{bootstrap_enabled?}\n"\
+            "  # Bootstrap locked: #{bootstrap_locked?}\n"\
+            "  # Bootstrap in progress: #{bootstrap_locked?}\n"\
+            "  # Bootstrap finished: #{bootstrap_finished?}\n"\
+            "  #{border1}####\n"\
+            "  #\n"
+  return header
+end
+
+def main
+  progress_count = 0
+  lock_count = 0
+
+  print_line("NTTE Bootstrap v#{$version} provisioner is starting up, hold on tight!...", true)
+  sleep 5
+
+  if ! bootstrap_enabled? then
+    print_line("Bootstrap is not enabled", false)
+    sysapi_update_log("Bootstrap is not enabled", :error)
+    $bootstrap_success = false
+    $bootstrap_finished = true
+  else
+
+    lock_timer_dup = $lock_timer
+    while lock_timer_dup != 0
+      lock_timer_dup -=1
+      puts lock_timer_dup
+      print_line("Waiting for bootstrap lock...#{lock_timer_dup}secs", true)
+      sleep 1
+      if bootstrap_locked? then
+        #lock_timer_dup = 0
+        break
+      end
+    end
+
+    if bootstrap_locked? then
+      while progress_count < $progress_timer
+        progress_count +=1
+
+        if ! bootstrap_enabled? and ! bootstrap_locked? then
+
+          # check puppet report
+          if puppet_check_last_run_failures.nil?
+            print_line("Could not find or parse puppet's last run, an error occurred.", false)
+            sysapi_update_log("Could not find or parse puppet's last run, an error occurred.", :error)
+          elsif puppet_check_last_run_failures > 0
+            print_line("Puppet had #{puppet_check_last_run_failures} failures during its run.", false)
+            sysapi_update_log("Puppet had #{puppet_check_last_run_failures} failures during its run.", :error)
+          else
+            $bootstrap_success = true
+          end        
+        
+          $bootstrap_finished = true
+          break
+        end
+
+        foo = (progress_count/$progress_timer) * 100
+        percent = foo.round
+        print_line("Progress: #{percent}%", true)
+        sleep 1
+      end
+    else
+      print_line("Bootstrap did not receive a lock within #{$lock_timer}Secs", false)
+      sysapi_update_log("Bootstrap did not receive a lock within #{$lock_timer}Secs", :error)
+      $bootstrap_success = false 
+      $bootstrap_finished = true
+    end
+
+  end
+
+  if bootstrap_success? then
+    print_line("Bootstrap complete, have a nice day!", true)
+    sysapi_update_log("Bootstrap complete")
+  else
+    print_line("Bootstap failed, contact SysEng", false)
+    sysapi_finishbuild(false, "Bootstap failed, contact SysEng")
+    sleep 999999
+  end
+
+end
+
+main
+
+exit 0

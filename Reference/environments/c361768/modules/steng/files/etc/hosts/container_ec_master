@@ -1,0 +1,24 @@
+#
+# Internet host table
+# Do not change this initial block
+# Local directions:
+::1     localhost
+127.0.0.1       localhost
+
+# Backup Servers
+#10.130.46.25    eus0000016 eus0000016-oob eus0000016.oob.eu.verio.net eus0000016-oob.eu.verio.net
+10.42.0.1       eus0000016 eus0000016-oob eus0000016.oob.eu.verio.net eus0000016-oob.eu.verio.net eul4400502 eul4400502-oob eul4400502.oob.eu.verio.net eul4400502-oob.eu.verio.net
+213.130.46.25   eus0000016-pip eus0000016.eu.verio.net loghost
+
+10.130.255.1    eus0000217 eus0000217-oob eus0000217.oob.eu.verio.net eus0000217-oob.eu.verio.net
+#10.42.0.4    eus0000217 eus0000217-oob eus0000217.oob.eu.verio.net eus0000217-oob.eu.verio.net
+213.130.39.34   eus0000217-pip eus0000217.eu.verio.net loghost
+
+81.20.73.49     eul4400502-pip eul4400502.eu.verio.net
+10.42.0.2       eul4400503 eul4400503-oob eul4400503.oob.eu.verio.net eul4400503-oob.eu.verio.net
+81.20.73.50     eul4400503-pip eul4400503.eu.verio.net
+10.42.0.3       eul4400504 eul4400504-oob eul4400504.oob.eu.verio.net eul4400504-oob.eu.verio.net
+81.20.73.51     eul4400504-pip eul4400504.eu.verio.net
+
+# General entrance:
+

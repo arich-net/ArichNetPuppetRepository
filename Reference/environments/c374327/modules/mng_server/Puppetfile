@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+forge 'https://forgeapi.puppetlabs.com'
+
+mod 'puppetlabs/mcollective',
+  :git => 'https://github.com/ntteurope/puppetlabs-mcollective.git',
+  :ref => 'refactor/hardcoded_configuration'
+
+mod 'NTTEAM/na_stdlib',
+  :git => 'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.na_stdlib'
+
+mod 'NTTEAM/cleng',
+  :git => 'git@packages.atlasit.com:puppet.cleng.git',
+  :ref => 'feature/AllowUnauthenticated'
+
+mod 'plathrop/supervisor',
+  :git => 'https://github.com/plathrop/puppet-module-supervisor.git'
+
+mod 'NTTEAM/grafana',
+  :git => 'git@packages.atlasit.com:puppet.grafana.git',
+  :ref => 'feature/ubuntu_14.04'
+
+mod 'ispavailability/graphite',
+    :git => 'https://github.com/ntteurope/puppet-graphite.git'
+
+mod 'NTTEAM/na_activemq',
+  :git => 'git@packages.atlasit.com:puppet.na_activemq.git'
+
+mod 'garethr/riemann'
+mod 'puppetlabs/apache'
+mod 'puppetlabs/rabbitmq'
+mod 'puppetlabs/firewall'
+mod 'puppetlabs/postgresql'

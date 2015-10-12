@@ -1,0 +1,434 @@
+#!/usr/bin/env ruby
+
+# vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+
+require 'optparse'
+require 'yaml'
+require 'logger'
+require 'pty'
+require 'expect'
+
+#CONSTANTS
+#
+
+DEFAULT_DIRECTORY = "/usr/openv/media"
+DEFAULT_CONFIG = "/usr/local/steng/backup/nbuinstall/etc/steng-install.yaml"
+CHECKSUM_FILE = "all-linux.md5sum"
+NB_71_DIR = "NetBackup_7.1_LinuxR_x86_64/"
+NB_71_FILE = "NetBackup_7.1_LinuxR_x86_64.tar.gz"
+PATCH_DIR = "patch"
+NB_7104_NB_PATCH = "NB_7.1.0.4.linuxR_x86.tar"
+NB_7104_CL_PATCH = "NB_CLT_7.1.0.4.tar"
+
+# Class definition
+
+class ScriptException < StandardError
+  attr_reader :cause
+  def initialize(cause = nil)
+    @cause = cause
+  end
+end
+
+# parse_cli()
+# parses the cli arguments and options
+# returns a map with the options
+# exits the program logging if there was any error
+def parse_cli()
+
+  options = {
+    :directory 	=> 	DEFAULT_DIRECTORY,
+    :config 	=>	DEFAULT_CONFIG,
+  }
+
+  OptionParser.new do |opts|
+    opts.banner = "Usage: steng-install.rb [master|media] [options]\n\n"+
+      "Deploys a Netbackup 7.1 System\n\n"+
+      "ACTIONS\n"+
+      "#{opts.summary_indent}master\t\tInstall a master server\n"+
+      "#{opts.summary_indent}media\t\tInstall a media server\n\n"+
+      "OPTIONS\n"
+
+    opts.on("-v","--[no-]verbose","Run verbosely") do |v|
+      options[:verbose] = true
+    end
+
+    opts.on("-D","--[no-]debug","Run in debug mode") do |deb_mode|
+      options[:debug] = true
+    end
+
+    opts.on("-m","--master MASTER","Master server hostname") do |m|
+      options[:master] = m
+    end
+
+    opts.on("-n","--media MEDIA","Media server hostname") do |n|
+      options[:media] = n
+    end
+
+    opts.on("-o","--opscenter OPSCENTER","Opscenter server hostname") do |o|
+      options[:opscenter] = o
+    end
+
+    opts.on("-d","--directory DIRECTORY","Directory holding the NB7.1 install files [#{options[:directory]}]") do |d|
+      options[:directory] = d
+    end
+
+    opts.on("-c","--config FILE","YAML file holding the script configuration [#{options[:config]}]") do |c|
+      options[:config] = c 
+    end
+
+    opts.on_tail("-h", "--help", "Show this message") do
+      puts opts
+      exit
+    end
+
+  end.parse!
+
+  options
+end
+
+# check_root()
+# checks the EUID is 0
+# if not, exits logging a FATAL
+def check_root
+  if Process.euid != 0
+    raise ScriptException.new(),"Program needs root privileges"
+  end
+end
+
+# Loads configuration
+def load_config(filepath)
+  $logger.info("Loading configuration")
+  config = nil
+  begin
+    config = YAML.load_file(filepath)
+  rescue Errno::ENOENT => e
+    raise ScriptException.new(e),"Configuration file not found"
+  rescue Exception => e
+    raise ScriptException.new(e),"Error when loading the configuration"
+  end
+  $logger.info("Configuration loaded")
+  config
+end
+
+
+# prepare_media(media_dir)
+# untars the agreed filename on the media_dir directory
+def prepare_install_media(media_dir)
+  $logger.info("Preparing media") 
+  $logger.debug("Checking media integrity") 
+  output=%x(cd #{media_dir};#{$config["md5sum"]} -c #{CHECKSUM_FILE} 2>&1)
+  status = $?.exitstatus
+  $logger.debug("Exit status: #{status}")
+  if status != 0 
+    raise ScriptException.new,"Media failed the md5 check"
+  end
+  $logger.debug("Untarring 7.1 media")
+  output = %x(cd #{media_dir};#{$config["tar"]} xzf #{NB_71_FILE} 2>&1)
+  tar_status = $?.exitstatus
+  if tar_status != 0
+    raise ScriptException.new,"Untar failed"
+  end
+  $logger.debug("Untarring 7.1.0.4 media")
+  patch_dir = "%s/%s"%[media_dir,PATCH_DIR]
+  if !File.directory?(patch_dir)
+    $logger.debug("Creating #{patch_dir}")
+    begin
+      Dir.mkdir(patch_dir)
+    rescue SystemCallError => e
+      raise ScriptException.new(e),"Error creating the patch directory"
+    end
+  end
+  output = %(cd #{patch_dir};#{tar} xzf #{media_dir}/#{NB_7104_NB_PATCH})
+  status = $?.exitstatus
+  if status != 0
+    raise ScriptException.new,"Error untarring server patch. Exit code #{status}"
+  end
+  output = %(cd #{patch_dir};#{tar} xzf #{media_dir}/#{NB_7104_CL_PATCH})
+  if status != 0
+    raise ScriptException.new,"Error untarring client patch. Exit code #{status}"
+  end
+  $logger.info("Media prepared")
+end
+
+def remove_install_media(media_dir)
+  $logger.info("Removing NB media")
+  dir_to_delete = "%s/%s"%[media_dir,NB_71_DIR]
+  $logger.debug("Checking directory #{dir_to_delete}")
+
+  # Check if the media dir has spaces
+  if dir_to_delete =~ /\s+/
+    raise ScriptException.new,"media path contains spaces. Refusing to delete"
+  end
+
+  $logger.debug("Deleting directory #{dir_to_delete}")
+  rm_output = %x(#{$config["rm"]} -rf "#{dir_to_delete}" 2>&1)
+  rm_status = $?.exitstatus
+
+  if rm_status != 0
+    raise ScriptException.new,"Problem deleting the media directory"
+  end
+
+  patch_dir_to_delete = "%s/%s"%[media_dir,PATCH_DIR]
+  if patch_dir_to_delete =~ /\s+/
+    raise ScriptException.new,"patch media path contains spaces. Refusing to delete"
+  end
+
+  $logger.debug("Deleting directory #{patch_dir_to_delete}")
+  rm_output = %x(#{$config["rm"]} -rf "#{patch_dir_to_delete}" 2>&1)
+  rm_status = $?.exitstatus
+
+  if rm_status != 0
+    raise ScriptException.new,"Problem deleting the patch media directory"
+  end
+
+  $logger.info("NB media removed")
+end
+
+def install_master_server_71(media_dir,master_hostname,opscenter_hostname,license)
+  nb_dir = "%s/%s"%[media_dir,NB_71_DIR]
+  exec_string = "cd #{nb_dir};./install"
+  $logger.info("Starting NB 7.1 software install")
+  PTY.spawn(exec_string) do |sin,sout,pid|
+    sout.sync = true
+    # First confirmation
+    sin.expect(/\(y\)\s/) { |output|
+      $logger.debug(output)
+      sout.puts "y"
+    }
+    #Os confirmation Prior to software upacking
+    sin.expect(/\(y\)\s/) { |output|
+      $logger.debug(output)
+      sout.puts "y"
+    }
+    #License key
+    sin.expect(/license key:\s/){ |output|
+      $logger.debug(output)
+      $logger.info("Software unpacked. Adding license")
+      sout.puts license
+    }
+    #Default hostname confirmation. We say no
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      $logger.info("Configuring hostname")
+      sout.puts "n"
+    }
+    #We enter the new hostname
+    sin.expect(/server:\s/){ |output|
+      $logger.debug(output)
+      sout.puts master_hostname
+    }
+    #Is a master server?
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      sout.puts "y"
+    }
+    #Do you want to add any media servers?
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      sout.puts "n"
+    }
+    #Enterprise media manager name
+    sin.expect(/\(default: [^\):]+\):\s/){ |output|
+      $logger.debug(output)
+      sout.puts master_hostname
+    }
+    #Should we start brpd? Yes
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      $logger.info("Starting NB bprd services")
+      sout.puts "y"
+    }
+
+    #Setup the opscenter hostname
+    sin.expect(/NONE\):\s/){ |output|
+      $logger.debug(output)
+      if opscenter_hostname
+        $logger.info("Registering in opscenter")
+        sout.puts opscenter_hostname
+      else
+        $logger.info("Skipping opscenter registration")
+        sout.puts
+      end
+    }
+
+    # Installation finished.
+    sin.expect(/File\s+([^\s]+)\s/){ |output|
+      trace_file = output[1]
+      $logger.info("Installer execution completed. Trace file #{trace_file}")
+    }
+  end
+end
+
+def install_media_server_71(media_dir,master_hostname,media_hostname,license)
+  nb_dir = "%s/%s"%[media_dir,NB_71_DIR]
+  exec_string = "cd #{nb_dir};./install"
+  $logger.info("Starting NB 7.1 software install")
+  PTY.spawn(exec_string) do |sin,sout,pid|
+    sout.sync = true
+    # First confirmation
+    sin.expect(/\(y\)\s/) { |output|
+      $logger.debug(output)
+      sout.puts "y"
+    }
+    #Os confirmation Prior to software upacking
+    sin.expect(/\(y\)\s/) { |output|
+      $logger.debug(output)
+      sout.puts "y"
+    }
+    #License key
+    sin.expect(/license key:\s/){ |output|
+      $logger.debug(output)
+      $logger.info("Software unpacked. Adding license")
+      sout.puts license
+    }
+    #More keys? We say no
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      sout.puts "n"
+    }
+    #Default hostname confirmation. We say no
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      $logger.info("Configuring hostname")
+      sout.puts "n"
+    }
+    #We enter the new hostname
+    sin.expect(/server:\s/){ |output|
+      $logger.debug(output)
+      sout.puts master_hostname
+    }
+    #Is a master server?
+    sin.expect(/\(y\)\s/){ |output|
+      $logger.debug(output)
+      sout.puts "n"
+    }
+    #Fully qualified name of the master server
+    sin.expect(/server\?\s/){ |output|
+      $logger.info("Configuring connection to master server #{master_hostname}")
+      $logger.debug(output)
+      sout.puts master_hostname
+    }
+    #Enterprise media manager name
+    sin.expect(/\(default: [^\):]+\):\s/){ |output|
+      $logger.debug(output)
+      sout.puts master_hostname
+    }
+
+    # Installation finished.
+    sin.expect(/File\s+([^\s]+)\s/){ |output|
+      trace_file = output[1]
+      $logger.info("Installer execution completed. Trace file #{trace_file}")
+    }
+  end
+end
+
+def start_nb
+  $logger.info("Starting NB services")
+  output = %x(/etc/init.d/netbackup stop 2>&1)
+  $logger.info("NB services started")
+end
+
+def stop_nb
+  $logger.info("Stopping NB services")
+  output = %x(/etc/init.d/netbackup stop 2>&1)
+  $logger.info("NB services stopped")
+end
+
+def pach_to_7104(media_dir)
+    $logger.info("Starting NB Patch to 7.1.0.4")
+    stop_nb
+    patch_dir = "%s/%s"%[media_dir,PATCH_DIR]
+    PTY.spawn("cd #{patch_dir};./NB_update.install") do |sin,sout,pid|
+      sout.sync = true
+      sin.expect(/\[q\]:\s/) { |output|
+        $logger.debug("selecting package")
+        $logger.debug(output)
+        sout.puts "NB_CLT_7.1.0.4"
+      }
+      sin.expect(/\[q\]:\s/) { |output|
+        $logger.debug(output)
+        sout.puts "q"
+      }
+    end
+    $logger.info("NB System patched to 7.1.0.4")
+end
+
+def install_master_server(media_dir,master_hostname,opscenter_hostname,license)
+
+  $logger.info("Starting NB master install")
+
+  install_master_server_71(media_dir,master_hostname,opscenter_hostname,license)
+  patch_to_7104(media_dir)
+
+  $logger.info("NB master install finished")
+end
+
+def install_media_sver(media_dir,master_hostname,media_hostname,opscenter_hostname)
+  $logger.info("Starting NB media install")
+
+  install_media_server_71(media_dir,master_hostname,opscenter_hostname,license)
+  patch_to_7104(media_dir)
+
+  $logger.info("NB master media finished")
+end
+
+# MAIN SCOPE VARIABLES
+#
+
+# logger and config will be the only variables not passed
+# as a parameter
+$logger = Logger.new(STDERR)
+$logger.level = Logger::ERROR
+$logger.datetime_format = "%Y%m%d%H%M%S"
+$options = nil
+$config = nil
+$action = ARGV[0]
+
+# MAIN
+
+begin
+  $options = parse_cli()
+
+  $logger.level = Logger::INFO if $options[:verbose]
+  $logger.level = Logger::DEBUG if $options[:debug]
+
+  check_root()
+
+
+  $config = load_config($options[:config])
+
+
+  prepare_install_media($options[:directory])
+
+  if $action == "master"
+
+    if !$options[:directory] or !$options[:master]
+      raise ScriptException.new,"'master' action requires a valid media directory and the master hostname to use"
+    end
+    if !$config["license"]
+      raise ScriptException.new, "'master' action requires a valid license"
+    end
+    install_master_server($options[:directory],$options[:master],$options[:opscenter],$config["license"])
+
+  elsif $action == "media"
+
+    if !$options[:directory] or !$options[:master] or !$options[:media]
+      raise ScriptException.new,"'media' action requires a valid media directory, the master hostname and the media hostname to use"
+    end
+    if !$config["license"]
+      raise ScriptException.new, "'media' action requires a valid license"
+    end
+    install_media_server($options[:directory],$options[:master],$options[:media],$config["license"])
+
+  else
+    raise ScriptException.new,"Unknown action: #{action}"
+  end
+
+  remove_install_media($options[:directory])
+
+rescue  ScriptException=>e
+  $logger.fatal(e.message)
+  if e.cause
+    puts e.cause
+  end
+end

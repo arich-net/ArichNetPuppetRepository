@@ -1,0 +1,112 @@
+# Define: apt::source
+#
+# This module manages apt sources.list.d (augeas)
+#
+# ##################################################################
+# ##########################     LEGACY   ##########################
+# ##################################################################
+#
+# We can now use a custom provider/type aptsource.rb, we define repo's in puppet/repo/<name>.pp
+#
+# Operating systems:
+#	:Working
+#		Ubuntu 8.04/10.04
+#		Debian 4/5
+# 	:Testing
+#
+# Parameters:
+#	$ensure = Add or remove entry
+#	$source = 
+#	$content =
+#
+# Actions:
+#	1) Add component as an array and pass to paramaterized class i.e
+#		augtool> print /files/etc/apt/sources.list.d/$name/component[x]/ (main|restricted)
+#	2) Do we really need the absent case statement (augeas) if we use file resource to remove file?
+#	3) apt does not see the repos unless the filename is /apt/sources.list.d/$name.list
+#
+# Bugs:
+#	1) If you manually remove the distribution "lucid" from /etc/apt/sources.list.d/<file>
+#		then the augeas tree is not correctly parsed and puppet will attempt to add the dist again
+#		but to the end of the line. ref: /usr/share/augeas/lenses/dist/aptsources.aug
+#
+# Restrictions:
+#	1) Only allows one entry per file.
+#	2) DO NOT change all variables ($type,$uri,$dist) at once else it wont be able to find it to modify it
+#	3) Currently cannot change URL as its using it to filter and set nodes. NEED TO CHANGE
+#
+# Requires:
+#
+# Sample Usage: 
+#	apt::source { 'vmware':
+#		ensure => 'present',
+#		type => 'deb',
+#		uri => 'http://packages.vmware.com/tools/esx/3.5latest/ubuntu',
+#		dist => 'lucid',
+#		component => ['main', 'restricted'],
+#	}
+#
+# [Remember: No empty lines between comments and class definition]
+define apt::source($ensure="present", $sourcename=$name, $type="", $uri, $dist="", $component = []) {
+
+#$component="undef",
+#component => ["main", "restricted"],} 
+# if $component { augeas ..
+# changes => augeas_net_interface($name, "routes", $routes),
+#apt_source_add_array
+
+# required due to apt::file"/etc/apt/sources.list.d" set to purge files.
+file { "/etc/apt/sources.list.d/$name.list":
+	ensure => $ensure,
+}
+
+case $ensure {
+	present: {	
+		augeas { "apt-source-add-$name" :
+			context => "/files/etc/apt/sources.list.d",
+			changes => [
+				# We use "00" as it will add to the end of the file
+				# it will then be a sequential number once you view the tree again.
+				# we could probably remove the sets and replace just for the ins new node..
+				#ins $name.list after /files/etc/apt/sources.list.d/*
+				"set $name.list/00/type '$type'",
+				"set $name.list/00/uri '$uri'",
+				"set $name.list/00/distribution '$dist'",
+			],
+			onlyif => "match /files/etc/apt/sources.list.d/*[label() = '$name.list'] size == 0",
+			notify  => Exec["apt-get_update"],
+		}
+		augeas { "apt-source-modify-$name":
+			context => "/files/etc/apt/sources.list.d",
+			changes => [
+				# Find the entries matching $uri and modify the nodes
+				"set $name.list/*[uri = '$uri']/type '$type'",
+				"set $name.list/*[uri = '$uri']/uri '$uri'",
+				"set $name.list/*[uri = '$uri']/distribution '$dist'",
+			],
+			onlyif => "match /files/etc/apt/sources.list.d/*[label() = '$name.list']/*[type = '$type' and uri = '$uri' and distribution = '$dist'] size == 0",
+			notify => Exec["apt-get_update"],
+			require => Augeas["apt-source-add-$name"],
+		}
+		
+		if $component {
+			apt::component { $component:
+				sourcename => $name,
+				uri => $uri,
+			}			
+		}#end if $component
+	}# Present
+	absent: {
+		augeas { "apt-source-remove-$name" :
+			context => "/files/etc/apt/sources.list.d",
+			changes => [
+				"rm $name.list",
+			],
+			#onlyif => "match /files/etc/apt/sources.list.d/*[label() = '$name'] size == 1",
+			notify  => Exec["apt-get_update"],
+		}
+		
+	} # Absent
+}
+
+} #Define

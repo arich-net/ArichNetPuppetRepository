@@ -1,0 +1,26 @@
+# PERMISSIONS FOR OSS TO ACCESS THE SYSTEM
+# AND FOR THE HAlO USER
+# THIS FILE IS PUPPET MANAGED SO DON'T EDIT IT LOCALLY
+
+#This line disable requiretty per halo user at 31/7/2104 as in NBU SAB instructions.
+Defaults:halo !requiretty
+
+%AG_NETBACKUP_OSS_EC ALL=(ALL) ALL
+
+halo ALL=NOPASSWD: /usr/openv/netbackup/bin/*, \
+  /usr/openv/netbackup/bin/admincmd/*, \
+  /usr/openv/netbackup/bin/goodies/*, \
+  /usr/openv/volmgr/*, \
+  /usr/openv/volmgr/bin/*, \
+  sudoedit /etc/hosts, \
+  /usr/local/bin/find, \
+  /usr/bin/cp, \
+  /usr/bin/more, \
+  /usr/openv/netbackup/bin/goodies/support/*, \
+  /usr/local/halo/netbackup-sab/bin/add_client_to_hosts_file.sh, \
+  /home/update/rm_client_frm_hosts_file.sh, \
+  /bin/cat, \
+  /bin/grep
+
+Defaults logfile="/var/log/sudo.log"
+

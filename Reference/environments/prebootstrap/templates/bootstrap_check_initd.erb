@@ -1,0 +1,72 @@
+<% if operatingsystem == 'RedHat' or operatingsystem == 'CentOS'  -%>
+#!/bin/bash
+#
+# /etc/init.d/bootstrap
+#
+# Starts the bootstrap check 
+#
+# chkconfig: 2345 90 10
+# description: Bootstrap check
+
+/usr/bin/bootstrap_check &
+<% elsif operatingsystem == 'Debian' or operatingsystem == 'Ubuntu' -%>
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          bootstrap_check
+<% if operatingsystem == 'Debian' -%>
+# Required-Start: 
+# Required-Stop:
+<% else -%>
+# Required-Start:    2 3 4 5 
+# Required-Stop:     0 1 6
+<% end -%>
+# Should-Start:      bootstrap_check 
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts the bootstrap check
+# Description: Starts the bootstrap check
+### END INIT INFO                                                                                                                                          
+
+DAEMON=/usr/bin/bootstrap_check
+DAEMON_ARGS=""
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=bootstrap_check
+PIDFILE="/var/run/${NAME}.pid"
+
+test -x $DAEMON || exit 0
+
+. /lib/lsb/init-functions
+
+start() {
+	start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --startas $DAEMON
+}
+
+stop() {
+	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE
+	rm $PIDFILE
+}
+
+status() {
+	echo "Bootstrap_check status"
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart|force-reload)
+        stop
+        start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|status|restart|force-reload|reload}" >&2
+        exit 1
+        ;;
+esac
+<% end %>

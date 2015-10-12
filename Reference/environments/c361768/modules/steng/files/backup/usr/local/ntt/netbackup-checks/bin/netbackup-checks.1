@@ -1,0 +1,238 @@
+#!/usr/local/ntt/bin/python2.5
+
+
+# Reference: Veritas Netbakup 6.0 Commands for UNIX and Linux (PDF)
+
+import commands, re, os, sys
+from optparse import OptionParser
+from pprint import pprint
+
+from nexus.web.http import WebPage, CONTENT_TYPE_TEXT
+
+def run_command(cmd):
+    (status, output) = commands.getstatusoutput(cmd)
+    if status != 0:
+        raise 'Error running command: %s [Exit Code: %s]' % (cmd, status)
+    return output
+
+def run_process_check (page, expected_processes):
+    output = run_command('ps -elf -opid,s,comm')
+    processes = output.split('\n')
+
+    running_processes = []
+    for process in processes[1:]:
+        (pid, state, command) = process.split()
+
+        # O - Running
+        # S - Sleeping
+        # R - Runnable
+        # Z - Zombie
+        # T - Stopped or being Traced
+
+        if state in ('O', 'S', 'R'):
+            if command not in running_processes:
+                running_processes.append(command)
+
+    checks_failed = 0
+
+    for expected_process in expected_processes:
+        found = False
+        for process in running_processes:
+            if re.search(expected_process, process):
+                found = True
+
+        if found:
+            page.add('  %s, running\n' % expected_process)
+        else:
+            page.add('  %s, not running [ERROR]\n' % expected_process)
+            checks_failed += 1
+
+    page.add('\n')
+
+    return checks_failed
+
+def check_processes (page):
+    process_regexp_path = '/usr/local/ntt/netbackup-checks/etc/process-regexps'
+    try:
+        f = open(process_regexp_path, 'r')
+        list = f.read()
+        f.close()
+    except IOError:
+        page.add(
+            "ALERT: IOError trying to read process list regexp file: " +
+            "IOError reading '%s'\n\n" % process_regexp_path)
+        return False
+
+    regexp_blank_line = re.compile('^\s*$')
+    regexp_comment = re.compile('^#')
+    regexp_title = re.compile('^(title:)(.*)')
+
+    title = ''
+    expected_processes = [];
+    failure_count = 0
+    for line in list.split('\n'):
+        if regexp_blank_line.match(line) or regexp_comment.match(line):
+            continue
+
+        m = regexp_title.match(line)
+        if m:
+            if (title != m.group(2)):
+                if title != '':
+                    page.add(title + '\n\n')
+                if len(expected_processes) > 0:
+                    failures = run_process_check(page, expected_processes)
+                    failure_count += failures
+
+            title = m.group(2)
+            expected_processes = []
+        else:
+            expected_processes.append(line)
+
+    if len(expected_processes) > 0:
+        if title != '':
+            page.add(title + '\n\n')
+        failures = run_process_check(page, expected_processes)
+        failure_count += failures
+
+    if failure_count > 0:
+        page.add(
+            "ALERT: Running processes check failed: %d failed process(es)\n\n" %
+            failure_count)
+
+    return failure_count == 0
+
+def get_drives_to_skip():
+    skip_file_path = '/usr/local/ntt/netbackup-checks/etc/drives-to-skip'
+    try:
+        f = open(skip_file_path, 'r')
+        list = f.read()
+        f.close()
+    except IOError:
+        return []
+   
+    drives = [] 
+    for drive in list.split('\n'):
+       if drive != '':
+           drives.append(drive)
+    return drives
+
+def host_compare(host1, host2):
+    m1 = re.search('^(.*?)\.', host1)
+    if m1: host1 = m1.group(1)
+    m2 = re.search('^(.*?)\.', host1)
+    if m2: host2 = m2.group(1)
+
+    return host1 == host2
+
+def check_vmo_drive_status(page):
+    page.add("Drive Status:\n\n")
+    
+    cmd = '/usr/bin/sudo /opt/openv/volmgr/bin/vmoprcmd'
+    output = run_command(cmd)
+
+    in_drive_status = False
+    drive_name = None
+    drives = []
+
+    alerts = []
+
+    skip_drives = get_drives_to_skip()
+    
+    for line in output.split('\n'):
+        
+        m = re.search('DRIVE STATUS', line)
+        if m is not None:
+            in_drive_status = True
+        
+        if in_drive_status:
+            if line == '': continue
+            if line.startswith('Drive Name'): continue
+            if line.startswith('    Host  '): continue
+            if line.startswith('=========='): continue
+            
+            m = re.search('^(\S+)\s', line)
+            if m is not None:
+                drive_name = m.group(1)
+                continue
+            
+            if drive_name is not None:
+                m = re.search('^\s+(\S+)\s+\S+\s+(\S+)', line)
+                if m is not None:
+                    host = m.group(1)
+                    status = m.group(2)
+                    drives.append((drive_name, host, status))
+                    #if host_compare(host, os.uname()[1]):
+                        #drives.append((drive_name, host, status))
+
+    for (drive, host, status) in drives:
+        if status in ('ACTIVE', 'SCAN-TLD', 'TLD', 'TL8'):
+            page.add('  %s [PASSED] %s\n' % (drive, status))
+        else:
+            if drive in skip_drives:
+                page.add('  %s [SKIPPED] %s\n' % (drive, status))
+            else:
+                page.add('  %s [ERROR] %s\n' % (drive, status))
+                alerts.append(
+                    "ALERT: Status check failed for drive %s: Status %s\n" %
+                    (drive, status))
+
+    if len(drives) == 0:
+        page.add(
+            "ALERT: The monitor is configured to check drives but " +
+                "there are none: no drives to check\n")
+
+    page.add('\n')
+
+    if len(alerts) > 0:
+        for alert in alerts:
+            page.add(alert)
+        page.add('\n');
+
+    return len(alerts) == 0
+
+def run_checks(page, check_drives):
+
+    check_list = []
+    check_list.append(check_processes)
+    if check_drives:
+        check_list.append(check_vmo_drive_status)
+
+    all_passed = True
+    for check in check_list:
+        if not check(page):
+            all_passed = False
+
+    if all_passed:
+        page.add('All Checks Passed\n')
+    else:
+        page.add('One or more checks failed (Details Above)\n')
+
+def main():
+    check_drives = False
+
+    page = WebPage(content_type=CONTENT_TYPE_TEXT)
+
+    if os.environ.has_key('REMOTE_USER'):
+         page.want_html_stack()
+
+         if page.has_param('check-drives'):
+            check_drives = True
+
+    else:
+        parser = OptionParser()
+        parser.add_option('--check-drives', action='store_true', default=False)
+
+        (opts, args) = parser.parse_args()
+        check_drives = opts.check_drives
+
+        if len(args) > 0:
+            print 'Error: No arguments required\n\n%s' % parser.format_help()
+            sys.exit(1)
+
+    page.add('Netbackup Status\n\n')
+
+    run_checks(page, check_drives)
+
+    page.display()
+
+if __name__ == '__main__': main()

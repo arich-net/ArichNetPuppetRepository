@@ -1,0 +1,28 @@
+## This configures Splunk to authenticate using our internal AD
+[authentication]
+authSettings = <%= name %>
+authType = LDAP
+
+[roleMap_<%= name %>]
+admin = AG_SPLUNK_ADMIN
+
+
+[<%= name %>]
+SSLEnabled = 1
+anonymous_referrals = 1
+bindDN = <%= bind_dn %>
+bindDNpassword = <%= bind_passwd %>
+charset = utf8
+groupBaseDN = <%= search_base %>
+groupMappingAttribute = dn
+groupMemberAttribute = member
+groupNameAttribute = cn
+host = <%= host %>
+nestedGroups = 0
+network_timeout = 20
+port = <%= port %>
+realNameAttribute = displayname
+sizelimit = 1000
+timelimit = 15
+userBaseDN = <%= search_base %>
+userNameAttribute = samaccountname

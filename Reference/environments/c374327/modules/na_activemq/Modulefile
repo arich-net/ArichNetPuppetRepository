@@ -1,0 +1,11 @@
+name          'NTTEAM-na_activemq'
+version       '0.1.0'
+source        'git@packages.atlasit.com:puppet.na_activemq.git'
+author        'NTTEAM'
+summary       'NTTEAM development manifests for ActiveMQ'
+license       'Copyright (C) 2014 NTEAM'
+project_page  'https://confluence.ntt.eu/display/AMMONIT/AM%3A+Monitoring+Home'
+
+dependency 'puppetlabs/firewall'
+dependency 'puppetlabs/java'
+dependency 'puppetlabs/stdlib'

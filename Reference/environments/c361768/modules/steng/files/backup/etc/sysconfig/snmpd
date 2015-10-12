@@ -1,0 +1,3 @@
+# puppet managed snmpd command line options
+# 
+OPTIONS="-LS0-4d -Lf /dev/null -p /var/run/snmpd.pid"

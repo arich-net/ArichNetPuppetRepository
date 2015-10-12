@@ -1,0 +1,41 @@
+Listen 4443 
+<VirtualHost *:4443>
+  ServerName puppeteer.londen01.infra.ntt.eu
+  ServerAlias sysapi 
+
+  SSLEngine On
+  SSLProtocol -ALL +SSLv3 +TLSv1
+  SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+  SSLCertificateFile /var/lib/puppet/ssl/certs/puppeteer.londen01.infra.ntt.eu.pem
+  SSLCertificateKeyFile /var/lib/puppet/ssl/private_keys/puppeteer.londen01.infra.ntt.eu.pem
+  SSLCertificateChainFile /var/lib/puppet/ssl/certs/ca.pem
+  SSLCACertificateFile /var/lib/puppet/ssl/certs/ca.pem
+    SSLCARevocationFile     /var/lib/puppet/ssl/ca/ca_crl.pem
+    SSLVerifyClient optional
+  SSLOptions +StdEnvVars
+  SSLVerifyDepth 1
+  
+  #RackBaseURI /
+
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+
+  
+  RackAutoDetect On
+  RailsAutoDetect On
+  DocumentRoot /usr/local/sysapi/rack/public
+  PassengerAppRoot /usr/local/sysapi/rack 
+
+  CustomLog ${APACHE_LOG_DIR}/sysapi_access.log combined
+  
+  <Directory /usr/local/sysapi/rack/public/>
+    Options None
+    AllowOverride None
+    Order allow,deny
+    allow from all
+    Options -MultiViews
+  </Directory>
+
+</VirtualHost>

@@ -1,0 +1,47 @@
+# Red Hat Update Agent config file.
+#
+disallowConfChanges[comment]=Config options that can not be overwritten by a config update action
+disallowConfChanges=noReboot;sslCACert;useNoSSLForPackages;noSSLServerURL;serverURL
+
+networkRetries[comment]=Number of attempts to make at network connections before giving up
+networkRetries=5
+
+enableProxy[comment]=Use a HTTP Proxy
+enableProxy=0
+
+serverURL[comment]=Remote server URL
+serverURL=https://<%= scope.lookupvar('rhn::params::server') %>/XMLRPC
+
+proxyPassword[comment]=The password to use for an authenticated proxy
+proxyPassword=
+
+noSSLServerURL[comment]=Remote server URL without SSL
+noSSLServerURL=http://<%= scope.lookupvar('rhn::params::server') %>/XMLRPC
+
+proxyUser[comment]=The username for an authenticated proxy
+proxyUser=
+
+versionOverride[comment]=Override the automatically determined system version
+versionOverride=
+
+sslCACert[comment]=The CA cert used to verify the ssl server
+sslCACert=<%= scope.lookupvar('rhn::params::sslcacert') %>
+
+debug[comment]=Whether or not debugging is enabled
+debug=0
+
+httpProxy[comment]=HTTP proxy in host:port format, e.g. squid.redhat.com:3128
+httpProxy=
+
+useNoSSLForPackages[comment]=Use the noSSLServerURL for package, package list, and header fetching
+useNoSSLForPackages=1
+
+systemIdPath[comment]=Location of system id
+systemIdPath=<%= scope.lookupvar('rhn::params::systemidpath') %>
+
+enableProxyAuth[comment]=To use an authenticated proxy or not
+enableProxyAuth=0
+
+noReboot[comment]=Disable the reboot actions
+noReboot=0
+

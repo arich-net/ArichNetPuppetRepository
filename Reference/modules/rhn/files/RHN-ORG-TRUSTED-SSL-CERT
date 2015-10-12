@@ -1,0 +1,81 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 0 (0x0)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=US, ST=Virginia, L=Sterling, O=NTT/VERIO, CN=rhnsat0-iad.eng.enterprise.verio.net
+        Validity
+            Not Before: Mar 15 17:08:53 2005 GMT
+            Not After : Mar  7 17:08:53 2036 GMT
+        Subject: C=US, ST=Virginia, L=Sterling, O=NTT/VERIO, CN=rhnsat0-iad.eng.enterprise.verio.net
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:9a:fa:88:b1:8f:07:43:c4:39:67:e6:ef:bd:ac:
+                    11:2d:55:1c:56:47:ca:38:94:be:13:fd:72:41:84:
+                    8f:fb:cb:a7:fb:aa:6c:50:f1:55:24:52:bb:99:ac:
+                    b4:c7:cf:78:90:65:f8:0e:27:11:5d:55:85:11:88:
+                    c8:ca:df:99:44:31:30:b2:c9:08:1c:68:c9:ea:d1:
+                    90:ae:8c:cf:4b:e2:20:a5:28:81:37:99:11:69:47:
+                    c2:f0:c7:5f:26:20:97:f1:05:08:77:d6:b5:e8:db:
+                    10:3a:da:55:cf:56:ba:2b:d4:bb:19:68:33:4e:55:
+                    65:6d:59:d6:17:a7:fa:76:0b:4a:8e:38:16:97:27:
+                    d0:65:eb:f1:08:4b:a4:bf:d5:ff:82:4b:3e:fa:d0:
+                    37:22:e0:44:61:65:db:5a:ee:cc:54:25:ee:fd:d2:
+                    0d:18:9d:f7:55:35:c6:fc:8a:51:89:16:af:44:89:
+                    ef:19:bc:ac:29:8d:5a:56:54:56:dd:2b:48:a0:c2:
+             X509v3 Extended Key Usage:
+            TLS Web Server Authentication, TLS Web Client Authentication
+            Netscape Comment:
+            RHN SSL Tool Generated Certificate
+            X509v3 Subject Key Identifier:
+            87:62:5F:E7:CF:2B:E7:77:94:AD:D5:B8:35:DD:1B:27:2F:91:F9:37
+            X509v3 Authority Key Identifier:
+            keyid:87:62:5F:E7:CF:2B:E7:77:94:AD:D5:B8:35:DD:1B:27:2F:91:F9:37
+            DirName:/C=US/ST=Virginia/L=Sterling/O=NTT/VERIO/CN=rhnsat0-iad.eng.enterprise.verio.net
+            serial:00
+
+    Signature Algorithm: sha1WithRSAEncryption
+        48:b0:13:5e:c7:27:73:51:a5:e1:b3:ff:bd:35:4b:58:1c:58:
+        6f:17:40:dd:77:dd:cd:4e:8f:47:b5:f8:13:03:9e:b3:2e:c2:
+        b6:b3:9b:ef:a3:90:83:35:42:80:08:4d:9a:9c:dc:58:99:08:
+        23:ab:50:c9:f5:83:56:f2:49:16:65:80:13:09:92:d5:56:a0:
+        0e:e9:55:fc:b8:89:6a:cd:c8:f9:0c:df:5f:d6:bb:14:37:43:
+        6d:2e:63:be:21:b2:a3:88:f8:56:50:91:2f:6a:00:83:51:af:
+        5e:71:c2:e2:6e:1f:4c:2e:1b:fe:fe:09:89:6f:58:9d:a6:c5:
+        85:9e:05:33:48:62:2f:6c:84:41:69:a5:cc:4e:b4:be:6d:ec:
+        f3:dd:00:e3:4d:d6:3e:9f:92:f3:ec:51:9c:2c:db:91:81:10:
+        b3:03:f8:29:b1:97:4d:26:2a:5e:c4:d5:0b:db:e0:a6:37:50:
+        68:6b:95:d9:87:80:9c:5f:5b:06:f3:32:05:63:46:f9:b6:a5:
+        8b:b3:fa:fe:f7:43:09:ee:65:30:02:bf:f9:58:58:f0:35:4e:
+        20:4d:49:ee:7f:e0:c8:ef:be:93:1e:d9:58:1c:76:20:c7:c8:
+        7a:b6:cd:2c:f8:5d:ac:f7:fa:b2:12:72:44:bb:ed:35:b2:30:
+        8f:c9:14:07
+-----BEGIN CERTIFICATE-----
+MIIEnDCCA4SgAwIBAgIBADANBgkqhkiG9w0BAQUFADB2MQswCQYDVQQGEwJVUzER
+MA8GA1UECBMIVmlyZ2luaWExETAPBgNVBAcTCFN0ZXJsaW5nMRIwEAYDVQQKEwlO
+VFQvVkVSSU8xLTArBgNVBAMTJHJobnNhdDAtaWFkLmVuZy5lbnRlcnByaXNlLnZl
+cmlvLm5ldDAeFw0wNTAzMTUxNzA4NTNaFw0zNjAzMDcxNzA4NTNaMHYxCzAJBgNV
+BAYTAlVTMREwDwYDVQQIEwhWaXJnaW5pYTERMA8GA1UEBxMIU3RlcmxpbmcxEjAQ
+BgNVBAoTCU5UVC9WRVJJTzEtMCsGA1UEAxMkcmhuc2F0MC1pYWQuZW5nLmVudGVy
+cHJpc2UudmVyaW8ubmV0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+mvqIsY8HQ8Q5Z+bvvawRLVUcVkfKOJS+E/1yQYSP+8un+6psUPFVJFK7may0x894
+kGX4DicRXVWFEYjIyt+ZRDEwsskIHGjJ6tGQrozPS+IgpSiBN5kRaUfC8MdfJiCX
+8QUId9a16NsQOtpVz1a6K9S7GWgzTlVlbVnWF6f6dgtKjjgWlyfQZevxCEukv9X/
+gks++tA3IuBEYWXbWu7MVCXu/dINGJ33VTXG/IpRiRavRInvGbysKY1aVlRW3StI
+oMJ/lhPodGqw8QxRk+Vv9vu2aIhFAygsAnFVJtry2UqT7rB/8b5e7PlvvJQZhKIn
+v6gXWWQav8lrzNuwcYdy5wIDAQABo4IBMzCCAS8wDAYDVR0TBAUwAwEB/zALBgNV
+HQ8EBAMCAqQwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMDEGCWCGSAGG
++EIBDQQkFiJSSE4gU1NMIFRvb2wgR2VuZXJhdGVkIENlcnRpZmljYXRlMB0GA1Ud
+DgQWBBSHYl/nzyvnd5St1bg13RsnL5H5NzCBoAYDVR0jBIGYMIGVgBSHYl/nzyvn
+d5St1bg13RsnL5H5N6F6pHgwdjELMAkGA1UEBhMCVVMxETAPBgNVBAgTCFZpcmdp
+bmlhMREwDwYDVQQHEwhTdGVybGluZzESMBAGA1UEChMJTlRUL1ZFUklPMS0wKwYD
+VQQDEyRyaG5zYXQwLWlhZC5lbmcuZW50ZXJwcmlzZS52ZXJpby5uZXSCAQAwDQYJ
+KoZIhvcNAQEFBQADggEBAEiwE17HJ3NRpeGz/701S1gcWG8XQN133c1Oj0e1+BMD
+nrMuwrazm++jkIM1QoAITZqc3FiZCCOrUMn1g1bySRZlgBMJktVWoA7pVfy4iWrN
+yPkM31/WuxQ3Q20uY74hsqOI+FZQkS9qAINRr15xwuJuH0wuG/7+CYlvWJ2mxYWe
+BTNIYi9shEFppcxOtL5t7PPdAONN1j6fkvPsUZws25GBELMD+Cmxl00mKl7E1Qvb
+4KY3UGhrldmHgJxfWwbzMgVjRvm2pYuz+v73QwnuZTACv/lYWPA1TiBNSe5/4Mjv
+vpMe2VgcdiDHyHq2zSz4Xaz3+rISckS77TWyMI/JFAc=
+-----END CERTIFICATE-----

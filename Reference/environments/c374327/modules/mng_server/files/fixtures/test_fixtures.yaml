@@ -1,0 +1,16 @@
+# Password is the same as username by convention
+- fields:
+    date_joined: 2013-01-01 00:00:00.0+00:00
+    email: admin@example.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2013-01-01 00:01:00.0+00:00
+    last_name: ''
+    password: pbkdf2_sha256$10000$PAezr7xU1iMp$ZjlEUEN3DFIGWNQKHXdmzEhu+bsnQRmEDb7WFBvQT+M=
+    user_permissions: []
+    username: admin
+  model: auth.user
+  pk: 1

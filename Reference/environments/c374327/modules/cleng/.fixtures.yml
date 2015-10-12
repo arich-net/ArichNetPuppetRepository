@@ -1,0 +1,6 @@
+fixtures:
+  repositories:
+    apt: https://github.com/puppetlabs/puppetlabs-apt
+    stdlib: git://github.com/puppetlabs/puppetlabs-stdlib.git
+  symlinks:
+    cleng: "#{source_dir}"

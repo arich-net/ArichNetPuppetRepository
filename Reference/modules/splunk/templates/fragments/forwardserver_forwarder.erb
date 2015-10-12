@@ -1,0 +1,25 @@
+
+<% if ssl == true -%>
+
+[tcpout]
+defaultGroup = splunkssl
+
+[tcpout:splunkssl]
+server = <%= host %>:<%= port %>
+sslRootCAPath = $SPLUNK_HOME/etc/certs/<%= sslrootca %>
+sslCertPath = $SPLUNK_HOME/etc/certs/<%= sslservercert %>
+sslPassword = <%= sslpassphrase %>
+sslVerifyServerCert = true
+
+<% else -%>
+
+[tcpout]
+defaultGroup = <%= host %>_<%= port %>
+disabled = false
+
+[tcpout:<%= host %>_<%= port %>]
+server = <%= host %>:<%= port %>
+
+[tcpout-server://<%= host %>:<%= port %>]
+
+<% end -%>

@@ -1,0 +1,16 @@
+# sudoers file.
+
+# User alias specification
+User_Alias      ADMINS = nttuser
+
+# Cmnd alias specification
+
+# Defaults specification
+Defaults        shell_noargs
+Defaults        authenticate
+Defaults        timestamp_timeout=0
+Defaults        log_host
+
+# User privilege specification
+root            ALL=(ALL) ALL
+ADMINS          ALL=(ALL) ALL

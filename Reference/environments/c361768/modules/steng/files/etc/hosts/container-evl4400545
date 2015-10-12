@@ -1,0 +1,24 @@
+127.0.0.1       localhost.localdomain           localhost
+
+### NetBackup public Network
+172.16.16.180	masterha-sc
+172.16.16.181	master01-sc 	evl4400544-sc
+172.16.16.182	master02-sc 	evl4400545-sc
+172.16.16.151	media01-sc 		eul4400526-sc
+172.16.16.152	media02-sc 		eul4400527-sc
+
+### NetBackup service Network
+10.75.9.179		svcvip
+10.75.9.180		masterha		
+10.75.9.181		master01		evl4400544-bkp
+10.75.9.182		master02		evl4400545-bkp
+10.75.9.151		media01			eul4400526-bkp
+10.75.9.152		media02			eul4400527-bkp
+
+### NetBackup HB Network 1
+192.168.1.1		master01-hb1	evl4400544-hb1
+192.168.1.2		master02-hb1	evl4400545-hb1
+
+### NetBackup HB Network 2
+192.168.2.1		master01-hb2	evl4400544-hb2
+192.168.2.2		master02-hb2	evl4400545-hb2

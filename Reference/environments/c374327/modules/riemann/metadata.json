@@ -1,0 +1,69 @@
+{
+  "name": "garethr-riemann",
+  "version": "0.5.3",
+  "source": "UNKNOWN",
+  "author": "garethr",
+  "license": "Apache License, Version 2.0",
+  "summary": "Module to manage the Riemann monitoring tool",
+  "description": "UNKNOWN",
+  "project_page": "https://github.com/garethr/garethr-riemann",
+  "dependencies": [
+    {
+      "name": "maestrodev/wget"
+    },
+    {
+      "name": "puppetlabs/gcc"
+    },
+    {
+      "name": "puppetlabs/java"
+    },
+    {
+      "name": "puppetlabs/stdlib"
+    },
+    {
+      "name": "stahnma/epel"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "AUTHORS": "aa3d324e4fa1677f1683bc23877700de",
+    "Gemfile": "de23db8bd337ddd977a975188e923966",
+    "Gemfile.lock": "9ffaaad7182e94dc277fa19450c13d6b",
+    "LICENSE": "47bbee59c4c1cb14cc3667035a227be0",
+    "Modulefile": "eef577543474f1f718ced8f15c2c53dc",
+    "README.md": "f8f59b80ddd4aabcf2568e3ebb00c57f",
+    "Rakefile": "f92a1f25ec8609132123a119b1241947",
+    "files/etc/riemann.config": "72950240e37ae9b046cbc2954963895f",
+    "manifests/config.pp": "c528a0008a471d1e1bd38077178805c8",
+    "manifests/dash/config.pp": "316e70e9de6c6c1c1b1ca698e42df272",
+    "manifests/dash/install.pp": "90fe5a08fd42a3d680c95084a9091c7e",
+    "manifests/dash/service.pp": "9298a56b989860cba941353939dc996f",
+    "manifests/dash.pp": "f89443af767b106cd461f398a766a1cf",
+    "manifests/init.pp": "ac5cfd89c5c8b80bb2da8253eb1258ee",
+    "manifests/install.pp": "5af995e9580c8b2f6acf384c51fc742d",
+    "manifests/params.pp": "bce3bb8954f84e385efd4b80efd443a7",
+    "manifests/service.pp": "6acc168b437b8f177b648c1e8db13ace",
+    "manifests/tools/config.pp": "cd4e3395d471e66ff022ea86c296586e",
+    "manifests/tools/install.pp": "eeed34e8387b92e4f8f025d25f869970",
+    "manifests/tools/service.pp": "99d68958759e036238f40311de01b5fa",
+    "manifests/tools.pp": "413063059b91dc084141e54dcd0a44ea",
+    "spec/classes/riemann/dash_spec.rb": "3b4be9bf71e077bff87e94259440ad22",
+    "spec/classes/riemann/riemann_spec.rb": "8237d46171338ab0f779e3b7a8ca36d3",
+    "spec/classes/riemann/tools_spec.rb": "70eb3e454ad1ae26b568cc1b30ff6aed",
+    "spec/spec_helper.rb": "792eeb7aa7edafb93e2bc1d27c5e75c5",
+    "spec/spec_helper_system.rb": "000e384e0644481e82eeaff5b8f9f8df",
+    "spec/system/basic_spec.rb": "9ebb31e5222f3094e2cad0b7419920a6",
+    "templates/etc/init/riemann-dash.conf.erb": "f67cce8ab5cd46f514987c738375e9af",
+    "templates/etc/init/riemann-dash.conf.redhat.erb": "a662f0deec4fb5de21322be621d2cb64",
+    "templates/etc/init/riemann-health.conf.erb": "a6324dcb1b1a0a5a285015f5d3b44d48",
+    "templates/etc/init/riemann-health.conf.redhat.erb": "4886b21f4fc5012e4d7396dc0d91dc32",
+    "templates/etc/init/riemann-net.conf.erb": "c6c4b50d8a5517afa51f71f54f474f1e",
+    "templates/etc/init/riemann-net.conf.redhat.erb": "0cb33274bb343951e40f7f29c7aafbd1",
+    "templates/etc/init/riemann.conf.erb": "b09bc348c91583d0d9811b45a4eec2ba",
+    "templates/etc/init/riemann.conf.redhat.erb": "cfa98c3178be70716be0b5b71025d6bd",
+    "templates/etc/puppet/riemann.yaml.erb": "d8a3b8e5edf0f8f64ed9cdc4f3529f7b",
+    "templates/etc/riemann-dash.rb.erb": "a06684f13686ad18e13ac4e5d1b735cf"
+  }
+}

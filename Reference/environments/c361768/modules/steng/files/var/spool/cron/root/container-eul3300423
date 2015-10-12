@@ -1,0 +1,32 @@
+# ROOT CRONTAB FOR BACKUP MASTER SERVERS
+# PUPPET MANAGED. DO NOT EDIT!
+# Monthly licensing report
+0 6 1 * * /usr/local/steng/backup/bin/Monthly_nb_report.sh ms.eng.storage@ntt.eu,adam.lembariti@ntt.eu
+0 6 * * 1 /usr/local/steng/backup/bin/weekly_nb_report.sh
+# Restart of Nbstserv NetBackup daemon
+0 8 * * * /usr/local/steng/backup/bin/RestartNbstserv.rb
+# SLP's suspended during backup window:
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-3DS-DUPLICATE-02W 
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-3DS-DUPLICATE-06W
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-3DS-DUPLICATE-07Y
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-3DS-DUPLICATE-13M
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-AAH-DUPLICATE-02W
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-AAH-DUPLICATE-06W
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-336818-RSA-AAH-DUPLICATE-13M
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-348126-IBMUK-13M 
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-Shared-DUPLICATE-13M 
+0 20 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil inactive -lifecycle SLP-Shared-DUPLICATE-2Y 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-3DS-DUPLICATE-02W 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-3DS-DUPLICATE-06W 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-3DS-DUPLICATE-07Y 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-3DS-DUPLICATE-13M 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-AAH-DUPLICATE-02W 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-AAH-DUPLICATE-06W 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-336818-RSA-AAH-DUPLICATE-13M 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-348126-IBMUK-13M 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-Shared-DUPLICATE-13M 
+0 6 * * * /usr/openv/netbackup/bin/admincmd/nbstlutil active -lifecycle SLP-Shared-DUPLICATE-2Y 
+# Daily Checks
+0 15 * * * /usr/local/steng/backup/bin/DailyChecks.rb sergi.pellise@ntt.eu,jordi.gomez@ntt.eu,alessandro.meloni@ntt.eu /usr/local/steng/backup/bin/logs/dailychecks
+0 16 * * *  tmpwatch -m 31d /usr/local/steng/backup/bin/logs/dailychecks
+0 0 * * * /usr/local/steng/backup/bin/ExportPolicies.rb /usr/local/steng/backup/bin/logs/dailychecks sergi.pellise@ntt.eu,jordi.gomez@ntt.eu,alessandro.meloni@ntt.eu

@@ -1,0 +1,2 @@
+require 'ntteam/ci/rake_tasks'
+NTTEAM::CI::Tasks.new

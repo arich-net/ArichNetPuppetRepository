@@ -1,0 +1,33 @@
+#
+# Nexus AutoQA VHOST
+#
+listen 4443
+<VirtualHost *:4443>
+  ServerName puppetmaster.londen01.infra.ntt.eu.pem
+  ServerAlias puppetmaster.londen01.infra.ntt.eu.pem
+  SuexecUserGroup nexus nexus
+ 
+  SSLEngine On
+  SSLProtocol -ALL +SSLv3 +TLSv1
+  SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+  SSLCertificateFile /var/lib/puppet/ssl/certs/puppetmaster.londen01.infra.ntt.eu.pem
+  SSLCertificateKeyFile /var/lib/puppet/ssl/private_keys/puppetmaster.londen01.infra.ntt.eu.pem
+  SSLCertificateChainFile /var/lib/puppet/ssl/certs/ca.pem
+  SSLCACertificateFile /var/lib/puppet/ssl/certs/ca.pem
+  SSLVerifyClient optional
+  SSLOptions +StdEnvVars
+  SSLVerifyDepth 1
+  
+  DocumentRoot /var/www
+
+  <LocationMatch ^/sabs/check(.*)$>
+     AuthType Basic
+     AuthName "Local"
+     AuthUserFile /usr/local/ntte/nexus/etc/checklist_password
+     Require valid-user
+  </LocationMatch>
+  
+  #ScriptAliasMatch       ^/sabs/checklist_scripts$              /var/www/ntt-scripts/checklist_scripts
+  ScriptAliasMatch     ^/sabs/checklists-sab           /var/www/ntt-scripts/checklist_scripts
+
+</VirtualHost>

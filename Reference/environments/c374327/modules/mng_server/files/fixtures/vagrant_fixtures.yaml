@@ -1,0 +1,206 @@
+- fields:
+    created: 2014-01-24 11:53:12.308554+00:00
+    dependencies: []
+    modified: 2014-01-24 11:53:12.322019+00:00
+    monitorized_by: null
+    name: snmp1
+    status: active
+    status_changed: 2014-01-24 11:53:12.322091+00:00
+  model: components.component
+  pk: 1
+- fields:
+    created: 2014-01-24 11:53:12.308554+00:00
+    dependencies: []
+    modified: 2014-01-24 11:53:12.322019+00:00
+    monitorized_by: null
+    name: eth1
+    status: active
+    status_changed: 2014-01-24 11:53:12.322091+00:00
+  model: components.component
+  pk: 2
+- fields:
+    agent_monitoring_enabled: false
+    dependencies: []
+    snmp_discovery_enabled: true
+    snmp_monitoring_enabled: true
+  model: components.host
+  pk: 1
+- fields:
+    dependencies: []
+    host: 1
+    iftype: 6
+    ip: 192.168.56.4
+    mac: null
+    ifindex: 3
+  model: networking.interface
+  pk: 2
+- fields: {community: public, interface: 2}
+  model: snmp.snmpconf
+  pk: 1
+- fields: {component: 1}
+  model: schedulers.componentperiodictask
+  pk: 1
+- fields: {args: '[1]', crontab: null, date_changed: ! '2014-01-24
+      11:53:12.401425+00:00', description: '', enabled: true, exchange: null, expires: null,
+    interval: 1, kwargs: '{}', last_run_at: null, name: 'SNMP Discovery-components.Host:1',
+    queue: null, routing_key: null, task: ntteam.snmp.tasks.Discovery, total_run_count: 0}
+  model: djcelery.periodictask
+  pk: 1
+- fields: {every: 30, period: seconds}
+  model: djcelery.intervalschedule
+  pk: 1
+- fields:
+    code: fs_dummy
+    component_type: [filesystems, mount]
+    schedule: 30s
+    source: agent
+    status: active
+    status_changed: 2014-01-28 10:21:19.215630+00:00
+  model: monitoring.monitor
+  pk: 1
+- fields:
+    code: cpu_usage
+    component_type: [components, host]
+    schedule: 1m
+    source: agent
+    status: active
+    status_changed: 2014-01-28 10:20:49.205522+00:00
+  model: monitoring.monitor
+  pk: 2
+- fields:
+    code: snmp_nic_op_status
+    component_type: [components, host]
+    schedule: 5m
+    source: snmp
+    status: active
+    status_changed: '2014-03-21 08:23:44.156707+00:00'
+  model: monitoring.monitor
+  pk: 3
+- fields: {code: dummy_exists, monitor: 1, status: active, status_changed: ! '2014-01-28
+      10:21:24.262821+00:00', threshold: 0.5}
+  model: monitoring.monitormetric
+  pk: 1
+- fields: {code: last_minute, monitor: 2, status: active, status_changed: ! '2014-01-28
+      10:20:49.467801+00:00', threshold: 1.5}
+  model: monitoring.monitormetric
+  pk: 2
+- fields: {code: last_five_minutes, monitor: 2, status: active, status_changed: ! '2014-01-28
+      10:20:49.473182+00:00', threshold: 1.2}
+  model: monitoring.monitormetric
+  pk: 3
+- fields: {code: last_fifteen_minutes, monitor: 2, status: active, status_changed: ! '2014-01-28
+      10:20:49.477568+00:00', threshold: 1.0}
+  model: monitoring.monitormetric
+  pk: 4
+- fields: {code: status, monitor: 3, status: active, status_changed: ! '2014-03-21
+      08:23:45.308068+00:00', threshold: 1.0}
+  model: monitoring.monitormetric
+  pk: 5
+- fields: {component: 1, created: ! '2014-01-09 08:29:54.519851+00:00', modified: ! '2014-01-09
+      08:29:54.545504+00:00', status: active, status_changed: ! '2014-01-09 08:29:54.519991+00:00'}
+  model: monitoring.componentconf
+  pk: 1
+- fields: {component: 2, created: ! '2014-01-09 08:29:54.519851+00:00', modified: ! '2014-01-09
+      08:29:54.545504+00:00', status: active, status_changed: ! '2014-01-09 08:29:54.519991+00:00'}
+  model: monitoring.componentconf
+  pk: 2
+# windowshost
+- fields:
+    agent_monitoring_enabled: true
+    created: 2014-06-04 17:32:39.843541+00:00
+    dependencies: []
+    modified: 2014-06-06 10:52:31.696736+00:00
+    monitorized_by: null
+    name: VCENTERHK
+    status: active
+    status_changed: 2014-06-06 10:52:31.696815+00:00
+    wmi_monitoring_enabled: true
+  model: components.component
+  pk: 3
+- fields:
+    dependencies: []
+    snmp_discovery_enabled: false
+    snmp_monitoring_enabled: false
+  model: components.host
+  pk: 3
+- fields:
+    dependencies: []
+  model: windows.windowshost
+  pk: 3
+- fields: {component: 3, created: ! '2014-01-09 08:29:54.519851+00:00', modified: ! '2014-01-09
+      08:29:54.545504+00:00', status: active, status_changed: ! '2014-01-09 08:29:54.519991+00:00'}
+  model: monitoring.componentconf
+  pk: 3
+# wmi host interface
+- fields:
+    agent_monitoring_enabled: false
+    created: 2014-06-04 17:33:57.331528+00:00
+    dependencies: []
+    modified: 2014-06-06 11:18:40.694985+00:00
+    monitorized_by: null
+    name: eth0
+    status: active
+    status_changed: 2014-06-06 11:18:40.695006+00:00
+    wmi_monitoring_enabled: false
+  model: components.component
+  pk: 5
+- fields:
+    dependencies: []
+    host: 3
+    ifindex: null
+    iftype: 6
+    ip: 192.168.2.66
+    mac: null
+    snmp_monitoring_enabled: false
+  model: networking.interface
+  pk: 5
+- fields: {component: 5, created: ! '2014-01-09 08:29:54.519851+00:00', modified: ! '2014-01-09
+      08:29:54.545504+00:00', status: active, status_changed: ! '2014-01-09 08:29:54.519991+00:00'}
+  model: monitoring.componentconf
+  pk: 5
+# wmi_cpu_usage monitor
+- fields:
+    code: wmi_cpu_usage
+    component_type: [windows, windowshost]
+    schedule: 1m
+    source: wmi
+    status: active
+    status_changed: '2014-03-21 08:23:44.156707+00:00'
+  model: monitoring.monitor
+  pk: 4
+- fields: {code: dummy_exists, monitor: 1, status: active, status_changed: ! '2014-01-28
+      10:21:24.262821+00:00', threshold: 0.5}
+  model: monitoring.monitormetric
+  pk: 1
+- fields: {code: cpu_usage_total, monitor: 4, status: active, status_changed: ! '2014-01-28
+      10:20:49.467801+00:00', threshold: 0.3}
+  model: monitoring.monitormetric
+  pk: 6
+# wmi windows host periodic task
+- fields:
+    args: '[3]'
+    crontab: null
+    date_changed: ! '2014-06-06 16:49:26.467231+00:00'
+    description: ''
+    enabled: true
+    exchange: null
+    expires: null
+    kwargs: '{"job_kwargs": {"monitor_code": "wmi_cpu_usage"}}'
+    # last_run_at: ! '2014-06-0616:49:26.425517+00:00'
+    name: 'WMI Probe-wmi_cpu_usage-windows.WindowsHost:3'
+    queue: null
+    routing_key: null
+    task: ntteam.wmi.tasks.Monitoring
+    total_run_count: 0
+  model: djcelery.periodictask
+  pk: 4
+- fields: {component: 3}
+  model: schedulers.componentperiodictask
+  pk: 4
+- fields: {monitor: 4}
+  model: schedulers.componentmonitorperiodictask
+  pk: 4
+# wmiconf
+- fields: {domain: windows2003, interface: 5, password: Abcdabcd1234, user: wmitest}
+  model: wmi.wmiconf
+  pk: 1

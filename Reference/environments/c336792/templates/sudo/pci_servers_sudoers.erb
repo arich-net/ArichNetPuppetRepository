@@ -1,0 +1,19 @@
+# sudoers file.
+
+# Cmnd alias specification
+
+# Defaults specification
+Defaults        shell_noargs
+Defaults        authenticate
+Defaults        timestamp_timeout=0
+Defaults        log_host
+
+User_Alias NTTADMINS = %AG_UNIX_ADMIN
+
+# User privilege specification
+root            ALL=(ALL) ALL
+NTTADMINS       ALL=(ALL) ALL
+snmp            ALL=(root) NOPASSWD: /usr/bin/chage
+
+# Grant everyone to use Puppet
+ALL ALL=(root) NOPASSWD: /usr/local/bin/update-configuration.sh

@@ -1,0 +1,7 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+forge 'https://forgeapi.puppetlabs.com'
+
+mod 'puppetlabs/firewall'
+mod 'puppetlabs/java'
+mod 'puppetlabs/stdlib'

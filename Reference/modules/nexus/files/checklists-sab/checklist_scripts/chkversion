@@ -1,0 +1,85 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Net::SSH::Expect;
+use Getopt::Long;
+
+unless (@ARGV>0)
+{
+    print  "$0 passFor_nsroot hostIp \r\n";
+    exit 0;
+}
+
+#Hide Command line from ps
+$0 = 'remote ls  is running';
+my ($host_ip, $password, $output, $status ,$inr) = '';
+GetOptions( 'passFor_nsroot=s' => \$password,
+            'hostIp=s' => \$host_ip );
+
+#Strip Netmask if passed
+$host_ip=~s/\/(.*?)$//g;
+
+# Create new connection to host using user root
+my $ssh = Net::SSH::Expect->new (
+    host => $host_ip, 
+    password=>$password, 
+    user => 'nsroot', 
+    raw_pty => 1,
+    timeout => 2
+);
+
+warn "Is Stderr is being trapped okay?\r\n";
+for (my $count = 0; $count < 100000; $count++) {
+    print "$count ";
+}
+exit 1;
+# Call login
+my $login_output;
+##login will die with status code 0 - so trap
+eval
+{
+   $login_output = $ssh->login();
+};
+
+# If login output doesn't contain the word welcome
+if ($@ || $login_output !~ /Done/) {
+    # Send a status code of 1(fail) with a copy of the login output(will
+    # show in Nexus)
+    print "2;;";
+    print $@ if $@;
+    print $login_output if $login_output;
+    exit 2;
+}
+
+print "Logged In Okay: ".$login_output."\r\n";
+
+print "---------------------\r\n";
+
+print "Checking version \r\n";
+my $test = $ssh->exec("show version");
+
+if ($@)
+{
+    print "2;;$@";
+    exit 2;
+}
+if (!$test)
+{
+    print "1;;Nothing returned from test";
+    exit 1 ;
+}
+
+# Throw an error if we don't see the "Done"
+unless ( $test =~ /Done/ ) {
+    # Send out a fail
+    print "1;;".$test;
+    exit 1 ;
+}
+
+# OK, if we've got this far without exiting, then it's a success(status code
+# 1) - better end the ssh session too
+print $test."\r\n";
+print "0;;Okay";
+$ssh->close();
+
+exit 0;

@@ -1,0 +1,121 @@
+FORGE
+  remote: https://forgeapi.puppetlabs.com
+  specs:
+    garethr/erlang (0.3.0)
+      puppetlabs/apt (>= 0)
+      puppetlabs/stdlib (>= 0)
+      stahnma/epel (>= 0)
+    garethr/riemann (0.5.3)
+      maestrodev/wget (>= 0)
+      puppetlabs/gcc (>= 0)
+      puppetlabs/java (>= 0)
+      puppetlabs/stdlib (>= 0)
+      stahnma/epel (>= 0)
+    ispavailability/file_concat (0.1.0)
+    maestrodev/wget (1.4.4)
+    nanliu/staging (0.4.1)
+    puppetlabs/activemq (0.2.0)
+      puppetlabs/java (>= 0.1.0)
+      puppetlabs/stdlib (>= 0.1.6)
+    puppetlabs/apache (1.1.0)
+      puppetlabs/concat (>= 1.0.0)
+      puppetlabs/stdlib (>= 2.4.0)
+    puppetlabs/apt (1.5.1)
+      puppetlabs/stdlib (>= 2.2.1)
+    puppetlabs/concat (1.1.0)
+      puppetlabs/stdlib (>= 4.0.0)
+    puppetlabs/firewall (1.1.3)
+    puppetlabs/gcc (0.2.0)
+    puppetlabs/java (1.1.1)
+      puppetlabs/stdlib (>= 0.1.6)
+    puppetlabs/java_ks (1.2.5)
+    puppetlabs/postgresql (3.4.0)
+      puppetlabs/apt (< 2.0.0, >= 1.1.0)
+      puppetlabs/concat (< 2.0.0, >= 1.0.0)
+      puppetlabs/firewall (>= 0.0.4)
+      puppetlabs/stdlib (< 5.0.0, >= 3.2.0)
+    puppetlabs/rabbitmq (4.0.0)
+      nanliu/staging (>= 0.3.1)
+      puppetlabs/apt (>= 1.0.0)
+      puppetlabs/stdlib (>= 2.0.0)
+    puppetlabs/stdlib (4.3.2)
+    richardc/datacat (0.4.3)
+    stahnma/epel (0.1.0)
+
+GIT
+  remote: git@packages.atlasit.com:puppet.cleng.git
+  ref: feature/AllowUnauthenticated
+  sha: 30e43f40377e22d50eb4169b34d1bb1f3578b820
+  specs:
+    NTTEAM/cleng (0.0.3)
+      puppetlabs/apt (>= 0)
+
+GIT
+  remote: git@packages.atlasit.com:puppet.grafana.git
+  ref: feature/ubuntu_14.04
+  sha: 2415e71a948dc35e4d5502ef8003e4ca1ded902c
+  specs:
+    NTTEAM/grafana (0.2.6)
+      puppetlabs/apache (>= 1.0.1)
+
+GIT
+  remote: git@packages.atlasit.com:puppet.na_activemq.git
+  ref: master
+  sha: 145404b090c82a60faad3a40bb622c17fa1c65da
+  specs:
+    NTTEAM/na_activemq (0.1.0)
+      puppetlabs/firewall (>= 0)
+      puppetlabs/java (>= 0)
+      puppetlabs/stdlib (>= 0)
+
+GIT
+  remote: https://github.com/ntteurope/puppet-graphite.git
+  ref: master
+  sha: 5e61baa2f0ee945ad51bb41b431d90f8a93106dd
+  specs:
+    ispavailability/graphite (0.0.1)
+      ispavailability/file_concat (>= 0.0.1)
+      puppetlabs/stdlib (>= 3.0.0)
+
+GIT
+  remote: https://github.com/ntteurope/puppetlabs-mcollective.git
+  ref: refactor/hardcoded_configuration
+  sha: c4ce8893672ccd35d0949fd56961d9b81c39d035
+  specs:
+    puppetlabs/mcollective (1.1.3)
+      garethr/erlang (>= 0)
+      puppetlabs/activemq (~> 0.2.0)
+      puppetlabs/java_ks (>= 0)
+      puppetlabs/rabbitmq (>= 0)
+      puppetlabs/stdlib (>= 1.0.0)
+      richardc/datacat (~> 0.4.0)
+
+GIT
+  remote: https://github.com/plathrop/puppet-module-supervisor.git
+  ref: master
+  sha: 3ceab1511f3db8694d2bbd732a24dce1f05516f4
+  specs:
+    plathrop/supervisor (0.1.0)
+
+GIT
+  remote: ssh://gerrit.devcl.am.ntt.eu:29418/puppet.na_stdlib
+  ref: master
+  sha: c1d8fece7c658d702df501a5253260dfcb16c395
+  specs:
+    NTTEAM/na_stdlib (0.1.0)
+      puppetlabs/stdlib (>= 0)
+
+DEPENDENCIES
+  NTTEAM/cleng (>= 0)
+  NTTEAM/grafana (>= 0)
+  NTTEAM/na_activemq (>= 0)
+  NTTEAM/na_stdlib (>= 0)
+  garethr/riemann (>= 0)
+  ispavailability/graphite (>= 0)
+  plathrop/supervisor (>= 0)
+  puppetlabs/apache (>= 0)
+  puppetlabs/firewall (>= 0)
+  puppetlabs/mcollective (>= 0)
+  puppetlabs/postgresql (>= 0)
+  puppetlabs/rabbitmq (>= 0)
+

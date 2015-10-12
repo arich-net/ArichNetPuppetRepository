@@ -1,0 +1,31 @@
+require 'ntteam/ci/rake_tasks'
+NTTEAM::CI::Tasks.new
+
+# We don't need rdoc and is breaking Jenkins builds
+Rake::Task[:rdoc].clear if Rake::Task[:rdoc]
+
+desc 'Sync MCollective plugin'
+task :sync_plugin, :plugin_path, :plugin_name do |task, args|
+  path = File.expand_path args[:plugin_path]
+  name = args[:plugin_name] || File.split(path)[-1]
+  target = "files/plugins/#{name}"
+
+  raise ArgumentError.new('Missing MCollective plugin') unless File.directory? path
+  Dir.mkdir target unless File.directory? target
+
+  dry = ENV['DRY']
+
+  if File.file? "#{path}/.gitignore"
+    exclude_from = "--exclude-from #{path}/.gitignore"
+  end
+
+  paths = %w{agent util validator application data}.map do |dir|
+    File.join(path, dir)
+  end.select {|dir| File.directory? dir}.join(' ')
+
+  cmd = "rsync -pthrvz#{dry} #{paths} #{target}/mcollective #{exclude_from}"
+  puts cmd
+  exec cmd
+end
+
+Puppet[:confdir] = '/etc/puppet/'

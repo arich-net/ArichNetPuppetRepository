@@ -1,0 +1,23 @@
+{
+  "LICENSE": "c632151a52c6ebaad8fad06ed94b6636",
+  "Modulefile": "8bce7112bf206266b4a625bd3a9d8124",
+  "README.md": "7d87cf65f5d36d221cc0186d99e72015",
+  "lib/puppet/provider/package/pipx.rb": "77481c41094924fff1051dddb6cdd4b3",
+  "lib/puppet/provider/venv/virtualenv.rb": "379c41330c31b3e8a3a8f03ff5096e6e",
+  "lib/puppet/provider/venv_package/pip.rb": "19e111bfd2b67e36f6a89ee87febb488",
+  "lib/puppet/type/venv.rb": "9fed969b710e84ca8eb287b2cef9c2e6",
+  "lib/puppet/type/venv_package.rb": "82d8892a02ac1d4813ef748473d59063",
+  "lib/puppet_x/counsyl/pip.rb": "c20e9f6924259243aaa9b7f043fb6f96",
+  "manifests/devel.pp": "84f44169b6ebe02fbd145c720beb5832",
+  "manifests/django.pp": "98572cc5f90b3db753e975b9fcf56d66",
+  "manifests/fabric.pp": "dd0ed5339a6d3eaa38f427f889f8812a",
+  "manifests/flask.pp": "7e36acd9f7028403cd5d02565712faa1",
+  "manifests/init.pp": "c4a85325144ccdfa7378474b8e22c916",
+  "manifests/ipython.pp": "845ffa5d779cbd4e735d7378fefdca19",
+  "manifests/openbsd.pp": "49c44789042dd0e5ed5d43c2c3ff55c5",
+  "manifests/params.pp": "c53cc1da1f0147eb960c737f8a7b71f7",
+  "manifests/requests.pp": "b51b4ce2bb597003808ea11296bdac24",
+  "manifests/virtualenv.pp": "f1b6a4d0171f0b72a7f1eda05607ee9c",
+  "manifests/windows.pp": "51f75ca173de42bea89c6124d04aff76",
+  "templates/ez_setup.py.erb": "e632deb39fca1299a1dcad88b6349db3"
+}

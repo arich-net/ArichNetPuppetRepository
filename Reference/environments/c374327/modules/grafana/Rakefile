@@ -1,0 +1,12 @@
+require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet-lint/tasks/puppet-lint'
+require 'puppet'
+
+PuppetLint.configuration.fail_on_warnings
+PuppetLint.configuration.send('disable_class_parameter_defaults')
+PuppetLint.configuration.ignore_paths = [
+  'spec/**/*.pp',
+  'pkg/**/*.pp',
+  'tests/**/*.pp',
+]
+Puppet[:confdir] = ENV['PUPPET_CONFDIR'] || '/etc/puppet'

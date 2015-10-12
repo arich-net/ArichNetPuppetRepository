@@ -1,0 +1,32 @@
+fixtures:
+  repositories:
+    apache: 'https://github.com/puppetlabs/puppetlabs-apache.git'
+    apt: 'https://github.com/puppetlabs/puppetlabs-apt.git'
+    cleng:
+      repo: 'git@packages.atlasit.com:puppet.cleng.git'
+      ref: 'bc960bf4dffbfebe00d751e4c9e4abb6dc3174e1'
+    concat: "https://github.com/puppetlabs/puppetlabs-concat.git"
+    datacat: 'https://github.com/richardc/puppet-datacat.git'
+    epel: 'git://github.com/stahnma/puppet-module-epel.git'
+    file_concat: 'https://github.com/electrical/puppet-lib-file_concat'
+    firewall: 'https://github.com/puppetlabs/puppetlabs-firewall.git'
+    gcc:  'git://github.com/puppetlabs/puppetlabs-gcc.git'
+    grafana:
+      repo: 'git@packages.atlasit.com:puppet.grafana.git'
+      ref: '38e79fe2198fa6e781dc320804b173eed1f45bab'
+    graphite: 'https://github.com/ntteurope/puppet-graphite.git'
+    java:  'git://github.com/puppetlabs/puppetlabs-java.git'
+    mcollective:
+      repo: "https://github.com/ntteurope/puppetlabs-mcollective.git"
+      ref: "c4ce8893672ccd35d0949fd56961d9b81c39d035"
+    na_activemq: 'git@packages.atlasit.com:puppet.na_activemq.git'
+    na_stdlib: 'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.na_stdlib.git'
+    postgresql: 'https://github.com/puppetlabs/puppetlabs-postgresql.git'
+    rabbitmq: 'https://github.com/puppetlabs/puppetlabs-rabbitmq'
+    riemann: 'https://github.com/garethr/garethr-riemann'
+    staging: "git://github.com/nanliu/puppet-staging.git"
+    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    supervisor: 'https://github.com/plathrop/puppet-module-supervisor.git'
+    wget: 'git://github.com/maestrodev/puppet-wget.git'
+  symlinks:
+    mng_server: "#{source_dir}"

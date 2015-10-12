@@ -1,0 +1,22 @@
+# SUDOERS FILE FOR NB MANAGEMENT 
+# (C) STORAGE ENGINEERING
+# PUPPET MANAGED
+#
+
+# User aliases
+
+#User_Alias  NB_OPS_L1 = ALL
+#User_Alias  NB_OPS_L2 = %AG_NETBACKUP_OPS_L2 , %AG_NETBACKUP_OPS_L3
+#User_Alias  NB_OPS_L3 = %AG_NETBACKUP_OPS_L3
+
+# Command Aliases
+
+Cmnd_Alias  TEST_CLIENT = /usr/openv/netbackup/bin/admincmd/bptestbpcd -verbose -client
+Cmnd_Alias  LIST_CLIENTS = /usr/openv/netbackup/bin/admincmd/bpplclients -allunique
+
+# Privileges
+
+ALL	ALL = (root) NOPASSWD: TEST_CLIENT, LIST_CLIENTS
+
+#OPS_L3  ALL = (root) bpexpdate, bpmedialist, bpplclients, bpgetconfig, bpimagelist, bppllist
+

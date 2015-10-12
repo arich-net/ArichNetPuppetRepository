@@ -1,0 +1,18 @@
+# This file contains regular expressions used to check running processes
+# Each regexp is checked. If one fails, an alert is raised.
+#
+# Lines starting with title: are used purely for formatting the check script's
+# output
+title:Media Server Processes
+/usr/openv/netbackup/bin/bpcd
+/usr/openv/netbackup/bin/vnetd
+/usr/openv/netbackup/bin/nbrmms
+/usr/openv/netbackup/bin/nbsl
+/usr/openv/netbackup/bin/bpcompatd
+/usr/openv/netbackup/bin/nbsvcmon
+/usr/openv/volmgr/bin/ltid
+/opt/VRTSpbx/bin/pbx_exchange
+^tldd$
+^vmd$
+^avrd$
+^tldcd$

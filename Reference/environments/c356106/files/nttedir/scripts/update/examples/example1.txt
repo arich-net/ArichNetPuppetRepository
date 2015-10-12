@@ -1,0 +1,1 @@
+/usr/bin/perl -I /usr/local/ntte/scripts/update/lib /usr/local/ntte/scripts/update/tool/UpdatesAvailableCheck.pl --config /usr/local/ntte/scripts/update/config/samples/Ubuntu804/UpdatesAvailableCheck.config --ioc /usr/local/ntte/scripts/update/config/samples/Ubuntu804/UpdatesAvailableCheck.ioc.config

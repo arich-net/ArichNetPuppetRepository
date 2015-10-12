@@ -1,0 +1,34 @@
+#
+# Puppet Agent configuration
+#
+[main]
+logdir = /var/log/puppet
+vardir = /var/lib/puppet
+ssldir = /var/lib/puppet/ssl
+rundir = /var/run/puppet
+factpath = $vardir/lib/facter
+templatedir = $confdir/templates
+#prerun_command = /etc/puppet/etckeeper-commit-pre
+#postrun_command = /etc/puppet/etckeeper-commit-post
+pluginsync = true
+
+[master]
+# This is a client only
+ca = false
+
+[agent]
+certname = <%= puppet_certname %>
+ca_server = <%= scope.lookupvar('puppet::params::ca_server') %>
+server = <%= puppet_master %>
+reportserver = <%= scope.lookupvar('puppet::params::report_server') %>
+report = <%= puppet_report %>
+configtimeout = 3600
+runinterval = <%= scope.lookupvar('puppet::params::runinterval') %>
+pluginsync = true
+plugindest = /var/lib/puppet/lib
+libdir = /var/lib/puppet/lib
+pidfile = <%= scope.lookupvar('puppet::params::pidfile') %>
+environment = <%= puppet_environment %>
+diff_args = -u
+
+

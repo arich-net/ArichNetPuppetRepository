@@ -1,0 +1,33 @@
+#
+# The PAM configuration file for the Shadow `login' service
+#
+
+# Enforce a minimal delay in case of failure (in microseconds).
+# (Replaces the `FAIL_DELAY' setting from login.defs)
+# Note that other modules may require another minimal delay. (for example,
+# to disable any delay, you should add the nodelay option to pam_unix)
+auth       optional   pam_faildelay.so  delay=<%= fail_delay %>
+auth       required  pam_securetty.so
+<% if enforcenment != :undef -%>
+# Puppet managing account lockout policies
+auth       required	 pam_tally.so per_user deny=<%= lockout_attempts %> unlock_time=<%= unlock_time %>
+<% end %>
+auth       requisite  pam_nologin.so
+session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so close
+session       required   pam_env.so readenv=1
+session       required   pam_env.so readenv=1 envfile=/etc/default/locale
+# Standard Un*x authentication.
+@include common-auth
+auth       optional   pam_group.so
+session    required   pam_limits.so
+session    optional   pam_lastlog.so
+session    optional   pam_motd.so
+session    optional   pam_mail.so standard
+# Standard Un*x authentication.
+@include common-account
+@include common-session
+@include common-password
+# SELinux needs to intervene at login time to ensure that the process
+# starts in the proper default security context. Only sessions which are
+# intended to run in the user's context should be run after this
+session [success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so open

@@ -1,0 +1,17 @@
+fixtures:
+  repositories:
+    apache: 'https://github.com/puppetlabs/puppetlabs-apache.git'
+    apt: 'https://github.com/puppetlabs/puppetlabs-apt.git'
+    concat: 'https://github.com/puppetlabs/puppetlabs-concat.git'
+    devtools: 'https://github.com/Spredzy/puppet-devtools.git'
+    firewall: 'https://github.com/puppetlabs/puppetlabs-firewall.git'
+    gerrit: 'ssh://gerrit.devcl.am.ntt.eu:29418/puppet.gerrit'
+    java: 'https://github.com/puppetlabs/puppetlabs-java.git'
+    jenkins: 'https://github.com/jenkinsci/puppet-jenkins.git'
+    ntp: 'https://github.com/puppetlabs/puppetlabs-ntp.git'
+    postgresql: 'https://github.com/puppetlabs/puppetlabs-postgresql.git'
+    rvm: 'https://github.com/maestrodev/puppet-rvm.git'
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    timezone: 'https://github.com/saz/puppet-timezone.git'
+  symlinks:
+    ci: "#{source_dir}"

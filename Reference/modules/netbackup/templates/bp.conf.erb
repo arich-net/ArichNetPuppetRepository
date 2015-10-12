@@ -1,0 +1,6 @@
+CLIENT_NAME = <%= hostname %>.oob.eu.verio.net
+<%if netbackup_nbservers.is_a? Array -%>
+<% netbackup_nbservers.each do |srv| -%><%= "SERVER = #{srv}\n" %><% end -%>
+<% elsif netbackup_nbservers != '' -%>
+<%= "SERVER = #{netbackup_nbservers}" -%>
+<% end -%>

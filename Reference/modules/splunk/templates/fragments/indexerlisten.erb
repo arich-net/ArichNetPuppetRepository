@@ -1,0 +1,18 @@
+
+# Indexer listen config
+
+<% if ssl == true -%>
+
+[splunktcp-ssl:<%= port %>]
+
+[SSL]
+password = <%= sslpassphrase %>
+requireClientCert = false
+rootCA = $SPLUNK_HOME/etc/certs/<%= sslrootca %>
+serverCert = $SPLUNK_HOME/etc/certs/<%= sslservercert %>
+
+<% else -%>
+
+[tcp://:<%= port %>]
+
+<% end -%>

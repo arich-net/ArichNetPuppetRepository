@@ -1,0 +1,25 @@
+#
+# MANAGED NETWORK DEVICE <%=@ifname%>
+# (C) NTT E Storage Engineering
+#
+
+DEVICE=<%=@ifname%>
+ONBOOT=yes
+USERCTL=no
+BOOTPROTO=none
+<%if @iftype=='vlan'-%>
+VLAN=yes
+<%elsif @iftype=='master'-%>
+BONDING_OPTS="<%=@bond_opts%>"
+<%elsif @iftype=='eth' && @master_if-%>
+SLAVE=yes
+MASTER=<%=@master_if%>
+<%end-%>
+<%if @ip && !@master_if-%>
+IPADDR=<%=@ip%>
+NETMASK=<%=@mask%>
+<%end-%>
+<%if @iftype=='eth' && @eth_opts-%>
+ETHTOOL_OPTS="<%=@eth_opts%>"
+<%end-%>
+

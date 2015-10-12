@@ -1,0 +1,8 @@
+notification :off
+
+pattern = 'spec/{classes,defines,unit,functions,hosts,integration}/**/*_spec.rb'
+
+guard 'rspec', all_after_pass: true, cmd: "rspec --drb --pattern #{pattern}" do
+  watch(%r{^manifests\/(.+)\.pp$}) { 'spec' }
+  watch(%r{(spec/classes/.+_spec\.rb)}) { |m| m }
+end

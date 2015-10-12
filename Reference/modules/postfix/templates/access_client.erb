@@ -1,0 +1,7 @@
+# Blacklist of IP address
+# <IP ADDRESS>	REJECT
+<% 
+scope.lookupvar('postfix::params::ipblacklist').each do |ipaddress| 
+-%>
+<%= ipaddress %>	REJECT
+<% end -%>

@@ -1,0 +1,29 @@
+127.0.0.1       localhost.localdomain           localhost
+213.130.39.228    eul3300453-pip
+192.168.145.228   eul3300453.oob.eu.verio.net      eul3300453-oob      eul3300453
+192.168.145.229   eul3300454.oob.eu.verio.net      eul3300454-oob      eul3300454
+213.130.39.229    eul3300454-pip
+
+#192.168.145.236   evw3301488
+192.168.145.236   evw3301488.oob.eu.verio.net   evw3301488
+192.168.145.236   EVW3301488.NETBTEST.INTERNAL
+#192.168.145.237   evw3301489
+192.168.145.237   evw3301489.oob.eu.verio.net evw3301489
+#192.168.145.237   EVW3301489.NETBTEST.INTERNAL
+192.168.145.197   evl3301377.oob.eu.verio.net   evl3301377
+192.168.145.239   DAG.NETBTEST.INTERNAL
+192.168.145.75    evw3300319.oob.eu.verio.net
+
+192.168.145.210   eue3300220.oob.eu.verio.net   eue3300220-oob  eue3300220      eue3300220.eu.verio.net
+212.119.10.4     eue3300084.oob.eu.verio.net   eue3300084-oob  eue3300084      eue3300084.eu.verio.net
+212.119.10.5     eue3300085.oob.eu.verio.net   eue3300085-oob  eue3300085      eue3300085.eu.verio.net
+212.119.10.6     eue3300086.oob.eu.verio.net   eue3300086-oob  eue3300086      eue3300086.eu.verio.net
+192.168.145.208   eue3300135.oob.eu.verio.net   eue3300135-oob  eue3300135      eue3300135.eu.verio.net
+192.168.145.209   eue3300136.oob.eu.verio.net   eue3300136-oob  eue3300136      eue3300136.eu.verio.net
+213.130.39.90     evw3300314.eu.verio.net       evw3300314
+192.168.145.187   evw3301458
+192.168.145.76    evw3301299 evw3301299.oob.eu.verio.net
+192.168.145.199   evl3301379
+192.168.145.244   evl3301469 evl3301469.oob.eu.verio.net
+192.168.145.230   evl3301440 evl3301440.oob.eu.verio.net
+

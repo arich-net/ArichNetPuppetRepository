@@ -1,0 +1,11 @@
+  <Location />
+    AuthType Basic
+    AuthName "NTTE-AM Gerrit"
+
+    AuthBasicProvider ldap
+    AuthLDAPURL "ldap://<%= @ldap_host %>/OU=Usuarios,OU=AtlasIT,DC=atlasit,DC=local?sAMAccountName?sub?(objectClass=user)"
+    AuthLDAPBindDN "cn=confluence,ou=UsuariosServicio,ou=AtlasIT,dc=atlasit,dc=local"
+    AuthLDAPBindPassword <%= @ldap_bind_password %>
+
+    Require valid-user
+  </Location>
