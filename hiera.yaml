@@ -1,0 +1,12 @@
+:backends:
+  - yaml
+  - json
+:yaml:
+  :datadir: /etc/puppetlabs/code/hieradata
+:json:
+  :datadir: /etc/puppetlabs/code/hieradata
+:hierarchy:
+  - "%{clientcert}"
+  - "%{datacenter}"
+  - "%{osfamily}"
+  - common
