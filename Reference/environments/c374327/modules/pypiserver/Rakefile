@@ -1,4 +1,0 @@
-require 'ntteam/ci/rake_tasks'
-NTTEAM::CI::Tasks.new
-
-PuppetLint.configuration.send('disable_class_parameter_defaults')

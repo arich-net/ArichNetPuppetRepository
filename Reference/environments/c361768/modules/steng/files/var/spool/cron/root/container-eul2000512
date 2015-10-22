@@ -1,9 +1,0 @@
-# ROOT CRONTAB FOR BACKUP MASTER SERVERS
-# PUPPET MANAGED. DO NOT EDIT!
-# Monthly licensing report
-0 6 1 * * /usr/local/steng/backup/bin/Monthly_nb_report.sh ms.eng.storage@ntt.eu,adam.lembariti@ntt.eu
-0 6 * * 1 /usr/local/steng/backup/bin/weekly_nb_report.sh
-# Daily Checks
-0 15 * * * /usr/local/steng/backup/bin/DailyChecks.rb sergi.pellise@ntt.eu,jordi.gomez@ntt.eu,alessandro.meloni@ntt.eu /usr/local/steng/backup/bin/logs/dailychecks
-0 16 * * *  tmpwatch -m 31d /usr/local/steng/backup/bin/logs/dailychecks
-0 0 * * * /usr/local/steng/backup/bin/ExportPolicies.rb /usr/local/steng/backup/bin/logs/dailychecks sergi.pellise@ntt.eu,jordi.gomez@ntt.eu,alessandro.meloni@ntt.eu

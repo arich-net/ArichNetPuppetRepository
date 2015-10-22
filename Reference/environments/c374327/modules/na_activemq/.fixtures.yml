@@ -1,7 +1,0 @@
-fixtures:
-  repositories:
-    firewall: 'https://github.com/puppetlabs/puppetlabs-firewall.git'
-    java:  'git://github.com/puppetlabs/puppetlabs-java.git'
-    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-  symlinks:
-    na_activemq: "#{source_dir}"

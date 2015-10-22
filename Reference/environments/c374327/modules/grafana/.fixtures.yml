@@ -1,7 +1,0 @@
-fixtures:
-  repositories:
-    apache: https://github.com/puppetlabs/puppetlabs-apache.git
-    concat: https://github.com/puppetlabs/puppetlabs-concat.git
-    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
-  symlinks:
-    grafana: "#{source_dir}"

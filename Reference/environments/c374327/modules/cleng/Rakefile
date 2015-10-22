@@ -1,5 +1,0 @@
-require 'ntteam/ci/rake_tasks'
-NTTEAM::CI::Tasks.new
-
-# We don't need rdoc and is breaking Jenkins builds
-Rake::Task[:rdoc].clear if Rake::Task[:rdoc]

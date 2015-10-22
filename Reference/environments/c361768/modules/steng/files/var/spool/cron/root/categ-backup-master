@@ -1,5 +1,0 @@
-# ROOT CRONTAB FOR BACKUP MASTER SERVERS
-# PUPPET MANAGED. DO NOT EDIT!
-# Monthly licensing report
-0 6 1 * * /usr/local/steng/backup/bin/Monthly_nb_report.sh
-0 6 * * 1 /usr/local/steng/backup/bin/weekly_nb_report.sh

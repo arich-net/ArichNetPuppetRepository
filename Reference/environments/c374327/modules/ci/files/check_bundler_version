@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'bundler'
-
-# we need at least 1.4 because we use :ruby_21 for platform checks.
-if Gem::Version.new(Bundler::VERSION) < Gem::Version.new('1.4')
-  exit 1
-end

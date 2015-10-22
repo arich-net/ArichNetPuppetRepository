@@ -1,8 +1,0 @@
-name    'ntteam/gerrit'
-version '0.0.1'
-source 'git@packages.atlasit.com:puppet.gerrit.git'
-author 'ntteam'
-license 'NTTEAM'
-summary 'NTTEAM Gerrit manifests'
-description 'NTTEAM Gerrit manifests'
-project_page ''

@@ -1,6 +1,0 @@
-# crontab -l
-# EMPTY ROOT CRON FILE
-# MANAGED BY PUPPET. DO NOT EDIT|
-
-# * 00,01,02,03,04,22,23 * * * /usr/bin/ruby /usr/local/steng/backup/bin/OSTCheckAndPing.rb >> /home/nttuser/OSTCheck.log
-

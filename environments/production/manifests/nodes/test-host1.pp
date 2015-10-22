@@ -1,4 +1,6 @@
 node 'test-host1.arich-net.com' {
+   # APT
+   include apt
    # SSH
    class { 'ssh':
       permit_root_login => 'yes',
