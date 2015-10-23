@@ -2,9 +2,9 @@
   - yaml
   - json
 :yaml:
-  :datadir: /etc/puppetlabs/code/hieradata
+  :datadir: /opt/puppetmaster/codedir/hieradata
 :json:
-  :datadir: /etc/puppetlabs/code/hieradata
+  :datadir: /opt/puppetmaster/codedir/hieradata
 :hierarchy:
   - "%{clientcert}"
   - "%{datacenter}"
