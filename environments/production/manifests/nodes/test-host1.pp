@@ -43,7 +43,7 @@ node 'test-host1.arich-net.com' {
    class { 'logstash': }
    
    logstash::configfile { 'output_$hostname':
-      content => template("${environment}/templates/logstash/output_${hostname}.erb"),
+      content => template("${environmentpath}${environment}/templates/logstash/output_${hostname}.erb"),
       order   => 10
    }   
 
