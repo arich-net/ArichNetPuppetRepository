@@ -1,3 +1,42 @@
+##1.0.1 ( Apr 17, 2015 )
+
+###Summary
+Bugfix release
+
+####Features
+
+####Bugfixes
+* Fix windows support by not defaulting owner,group and mode values
+
+####Changes
+
+####Testing changes
+
+####Known bugs
+
+
+##1.0.0 ( Apr 09, 2015 )
+
+###Summary
+Major release.
+The module has been moved from the ispavailability account on Forge to elecrical.
+
+####Features
+* Major refactoring to enhance functionality
+* Re-use existing file resource to avoid code duplication
+* Make the module more compatiable with puppetlabs-concat
+* Support array of sources
+
+####Bugfixes
+
+####Changes
+
+####Testing changes
+* Add centos 7 acceptance testing
+* Add tests for user/group/mode options
+
+####Known bugs
+
 ##0.3.0 ( Mar 26, 2015 )
 
 ###Summary
