@@ -1,0 +1,22 @@
+#
+# Puppet Managed Output File
+#
+output {
+#  stdout { codec => rubydebug }
+#  redis {
+#    host => "172.16.0.1"
+#    password => "***********"
+#    data_type => "list"
+#    key => "logstash"
+#  }
+  rabbitmq {
+    host => "172.16.0.1"
+    port => "5672"
+    vhost => "/arich-notes"
+    user => "arich-notes"
+    password => "QXGyLYYvU8"
+    exchange => "logstash"
+    exchange_type => "direct"
+    key => "logstash"
+  }
+}

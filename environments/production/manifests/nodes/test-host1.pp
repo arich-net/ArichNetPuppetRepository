@@ -40,6 +40,12 @@ node 'test-host1.arich-net.com' {
    ####################
    #      END APT     #
    ####################
+   class { 'logstash': }
+   
+   logstash::configfile { 'output_$hostname':
+      content => template("${environment}/templates/logstash/output_${hostname}.erb"),
+      order   => 10
+   }   
 
    #
    # SSH
