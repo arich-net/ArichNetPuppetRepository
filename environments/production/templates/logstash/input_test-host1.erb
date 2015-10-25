@@ -1,0 +1,10 @@
+# Puppet Managed Output File
+input {
+  file {
+    #path => "/var/log/apache2/arich-notes_*"
+    path => "/tmp/logs/arich-notes_*"
+    start_position => beginning
+    #sincedb_path => "/dev/null"
+    exclude => "*.gz"
+  }
+}
