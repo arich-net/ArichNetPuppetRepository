@@ -1,18 +1,17 @@
 node 'test-host1.arich-net.com' {
-   #
-   # APT
-   #
+   ####################
+   #     START APT    #
+   ####################
+   class { 'apt':
+      purge => {
+         'sources.list' => true,
+         'sources.list.d' => true,
+      }
+   }  
    case $lsbdistid {
       'Ubuntu':	{ $location = 'http://es.archive.ubuntu.com/ubuntu'  }
       'Debian':	{ $location = 'http://ftp.es.debian.org/debian'  }
    }
-
-   class { 'apt':
-      purge => {
-         'sources.list' => true,
-      }
-   }
-
    apt::source { 'ubuntu':
       location => $location,
       repos => 'main restricted',
@@ -20,6 +19,27 @@ node 'test-host1.arich-net.com' {
          'deb' => true,
       }
    }
+   #apt::key { 'elasticsearch':
+   #   id      => 'D27D666CD88E42B4',
+   #   server  => 'pgp.mit.edu',
+   #}
+   apt::source { 'elasticsearch':
+      comment  => 'This is the Elasticsearch mirror',
+      location => 'http://packages.elasticsearch.org/logstash/1.5/debian',
+      release  => 'stable',
+      repos    => 'main',
+      key      => {
+         'id'     => 'D27D666CD88E42B4',
+         'server' => 'pgp.mit.edu',
+      },
+      include  => {
+         'deb' => true,
+      },
+   }
+   
+   ####################
+   #      END APT     #
+   ####################
 
    #
    # SSH
@@ -28,6 +48,6 @@ node 'test-host1.arich-net.com' {
       permit_root_login => 'yes',
       sshd_config_allowusers => ['root'],
       sshd_config_banner => '/etc/banner',
-      sshd_banner_content => "Welcome to server ${fqdn} \n",
+      sshd_banner_content => "Welcome ARICH-NET Server ${fqdn} \n",
    }
 }
