@@ -53,7 +53,7 @@ node 'test-host1.arich-net.com' {
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/input_${hostname}.erb"),
       order   => 10
    }
-   logstash::configfile { 'input_$hostname':
+   logstash::configfile { 'filter_$hostname':
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/filter_${hostname}.erb"),
       order   => 10
    }
