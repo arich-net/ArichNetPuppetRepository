@@ -1,12 +1,17 @@
 :backends:
   - yaml
   - json
+  - rest
 :yaml:
   :datadir: /opt/puppetmaster/codedir/hieradata
 :json:
   :datadir: /opt/puppetmaster/codedir/hieradata
+:rest:
+  :server: '127.0.0.1'
+  :port: 18080
+  :api: '/arichrest/api'
 :hierarchy:
-  - "%{clientcert}"
-  - "%{datacenter}"
-  - "%{osfamily}"
+  - rabbitmq/%{hostname}/password
+  - superpod/%{superpod}
+  - superpod/%{superpod}/pod/%{pod}
   - common
