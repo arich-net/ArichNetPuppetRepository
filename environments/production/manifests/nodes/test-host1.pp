@@ -41,9 +41,11 @@ node 'test-host1.arich-net.com' {
    #      END APT     #
    ####################
    class { 'logstash': }
+
+   $rabbit_password = hiera("rabbit_password")
    
    logstash::configfile { 'output_$hostname':
-      content => template("${environmentpath}${environment}/templates/logstash/output_${hostname}.erb"),
+      content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/output_${hostname}.erb"),
       order   => 10
    }   
 

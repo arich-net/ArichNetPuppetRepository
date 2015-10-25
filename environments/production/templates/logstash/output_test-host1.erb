@@ -14,7 +14,7 @@ output {
     port => "5672"
     vhost => "/arich-notes"
     user => "arich-notes"
-    password => "QXGyLYYvU8"
+    password => "<%= @rabbit_password %>"
     exchange => "logstash"
     exchange_type => "direct"
     key => "logstash"
