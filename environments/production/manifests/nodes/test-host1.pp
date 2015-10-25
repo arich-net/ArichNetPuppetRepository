@@ -29,7 +29,7 @@ node 'test-host1.arich-net.com' {
       release  => 'stable',
       repos    => 'main',
       key      => {
-         'id'     => 'D27D666CD88E42B4',
+         'id'     => '46095ACC8548582C1A2699A9D27D666CD88E42B4',
          'server' => 'pgp.mit.edu',
       },
       include  => {
