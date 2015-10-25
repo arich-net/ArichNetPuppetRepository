@@ -40,9 +40,7 @@ node 'test-host1.arich-net.com' {
    ####################
    #      END APT     #
    ####################
-   class { 'logstash': 
-      java_install => true,  
-   }
+   class { 'logstash': }
 
    $rabbit_password = hiera("rabbit_password")   
    logstash::configfile { 'output_$hostname':
