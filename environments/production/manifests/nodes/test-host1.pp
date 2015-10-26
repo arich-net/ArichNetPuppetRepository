@@ -49,10 +49,16 @@ node 'test-host1.arich-net.com' {
    class { 'deploy':
       tempdir => '/opt/java',      
    }
-   deploy::file { 'jre-8u65-linux-$architecture.tar.gz':
+   deploy::file { "jre-8u65-linux-${architecture}.tar.gz":
       target => '/opt/java/jdk',
-      url => 'http://192.168.1.2/packages/$architecture',
+      url => "http://192.168.1.2/packages/${architecture}",
       strip => true,
+   }
+
+   alternative_entry { '/opt/java/jdk/bin/java':
+     altlink => '/usr/bin/java',
+     altname => 'java',
+     priority => 1,
    }
    
    $rabbit_password = hiera("rabbit_password")   
