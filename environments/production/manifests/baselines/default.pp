@@ -1,4 +1,4 @@
 # Default class for environment production
-class production::default {
+class production::defaultenv {
    # Nothing to do
 }

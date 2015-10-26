@@ -1,5 +1,5 @@
 # Logstash class for environment production
-class production::apt {
+class production::aptenv {
    ####################
    #     START APT    #
    ####################
@@ -8,11 +8,13 @@ class production::apt {
          'sources.list' => true,
          'sources.list.d' => true,
       }
-   }  
+   }
+ 
    case $lsbdistid {
       'Ubuntu': { $location = 'http://es.archive.ubuntu.com/ubuntu'  }
       'Debian': { $location = 'http://ftp.es.debian.org/debian'  }
    }
+
    apt::source { 'ubuntu':
       location => $location,
       repos => 'main restricted',

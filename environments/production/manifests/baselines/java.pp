@@ -1,5 +1,5 @@
 # Logstash class for environment production
-class production::java {
+class production::javaenv {
    #####################
    #    START JAVA     #
    #####################
@@ -18,7 +18,6 @@ class production::java {
      altlink => '/usr/bin/java',
      altname => 'java',
      priority => 1,
-     require => Class["deploy::file"],
    }
    
    #####################

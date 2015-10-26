@@ -1,8 +1,8 @@
 node 'test-host1.arich-net.com' {
   
-   class { 'production::apt': }
-   class { 'production::logstash': }
-   class { 'production::java': }
+   include production::aptenv
+   include production::logstashenv
+   include production::javaenv
 
    #
    # SSH

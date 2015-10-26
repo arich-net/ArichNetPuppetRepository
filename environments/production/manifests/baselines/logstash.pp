@@ -1,5 +1,5 @@
 # Logstash class for environment production
-class production::logstash {
+class production::logstashenv {
    ########################
    #    START LOGSTASH    #
    ########################
