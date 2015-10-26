@@ -40,8 +40,21 @@ node 'test-host1.arich-net.com' {
    ####################
    #      END APT     #
    ####################
+
+   ########################
+   #    START LOGSTASH    #
+   ########################
    class { 'logstash': }
 
+   class { 'deploy':
+      tempdir => '/opt/java',      
+   }
+   deploy::file { 'jre-8u65-linux-$architecture.tar.gz':
+      target => '/opt/java/jdk',
+      url => 'http://192.168.1.2/packages/$architecture',
+      strip => true,
+   }
+   
    $rabbit_password = hiera("rabbit_password")   
    logstash::configfile { 'output_$hostname':
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/output_${hostname}.erb"),
@@ -55,6 +68,10 @@ node 'test-host1.arich-net.com' {
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/filter_${hostname}.erb"),
       order   => 10
    }
+
+   ########################
+   #     END LOGSTASH     #
+   ########################
 
    #
    # SSH

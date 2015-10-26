@@ -1,0 +1,18 @@
+{
+  "Gemfile": "4ca4b32a0a4ba305db24499d945be329",
+  "Gemfile.lock": "cb9f53a3771127d590686699295f2a73",
+  "Modulefile": "98fa19e3d10735e223c35dd77ede67e4",
+  "README": "bbe6855e238ecb28885cafff497b4c5f",
+  "README.markdown": "f8ca28ae1b653d35b0cf0074b32572a7",
+  "Rakefile": "bdca01e42d0f9c298cd824a9469deb28",
+  "manifests/file.pp": "e5886e76a65113b9ccf71c0a70c9fdc5",
+  "manifests/init.pp": "d608b0695f0f28fe4885701e71d4b646",
+  "manifests/untar.pp": "707ea15e0259037b99b15c0ccbd18828",
+  "manifests/unzip.pp": "84de6e943dfab0b90a7bcbe2ade1c060",
+  "metadata.json": "d10638b003b0c8771352be6f2475eb82",
+  "spec/defines/deploy_files_spec.rb": "f3d6ae8208d38f5e3b8b49a1c760639a",
+  "spec/fixtures/manifests/site.pp": "ab871a5a3b3923e123ab175d0fde7fe6",
+  "spec/spec.opts": "d41d8cd98f00b204e9800998ecf8427e",
+  "spec/spec_helper.rb": "b078f472d1afc5bb536e2224cefef089",
+  "tests/init.pp": "50cddb8fafe515df10014b3d5cb05997"
+}
