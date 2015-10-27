@@ -18,6 +18,7 @@ class production::javaenv {
      altlink => '/usr/bin/java',
      altname => 'java',
      priority => 1,
+     require => Deploy::File["jre-8u65-linux-${architecture}.tar.gz"],
    }
    
    #####################
