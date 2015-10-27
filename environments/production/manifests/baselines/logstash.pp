@@ -3,7 +3,10 @@ class production::logstashenv {
    ########################
    #    START LOGSTASH    #
    ########################
-   class { 'logstash': }
+   class { 'logstash': 
+     status => 'enabled',
+     restart_on_change => true
+   }
    
    $rabbit_password = hiera("rabbit_password")
       
@@ -17,7 +20,18 @@ class production::logstashenv {
    }
    logstash::configfile { 'filter_$hostname':
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/filter_${hostname}.erb"),
-      order   => 10
+      order   => 20
+   }
+   
+   class { 'deploy':
+      tempdir => '/tmp',      
+   }
+   
+   # Install GeoLite Data   
+   deploy::file { 'GeoLiteCity.dat.gz':
+      target => '/etc/logstash/geolitecity',
+      url => 'http://geolite.maxmind.com/download/geoip/database',
+      strip => true,
    }
    ########################
    #     END LOGSTASH     #
