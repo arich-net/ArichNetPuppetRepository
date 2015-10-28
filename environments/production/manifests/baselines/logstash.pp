@@ -28,10 +28,10 @@ class production::logstashenv {
    }
    
    # Install GeoLite Data   
-   deploy::file { 'GeoLiteCity.dat.gz':
+   archive { 'GeoLiteCity.dat':
       target => '/etc/logstash/geolitecity',
-      url => 'http://geolite.maxmind.com/download/geoip/database',
-      strip => true,
+      url => 'http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.xz',
+      ensure => present,
    }
    ########################
    #     END LOGSTASH     #
