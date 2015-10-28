@@ -21,17 +21,14 @@ class production::logstashenv {
    logstash::configfile { 'filter_$hostname':
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/filter_${hostname}.erb"),
       order   => 20
-   }
-   
-   class { 'deploy':
-      tempdir => '/tmp',      
-   }
+   }     
    
    # Install GeoLite Data   
    archive { 'GeoLiteCity.dat':
       target => '/etc/logstash/geolitecity',
-      url => 'http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.xz',
+      url => 'http://192.168.1.2/logstash/GeoLiteCity.tar.gz',
       ensure => present,
+      require => Deploy['deploy'],
    }
    ########################
    #     END LOGSTASH     #

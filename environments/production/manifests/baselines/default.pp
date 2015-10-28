@@ -1,4 +1,7 @@
 # Default class for environment production
 class production::defaultenv {
-   # Nothing to do   
+   # Nothing to do
+   class { 'deploy':
+      tempdir => '/tmp',      
+   }   
 }
