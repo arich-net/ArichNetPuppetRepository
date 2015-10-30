@@ -5,8 +5,11 @@ node 'arich-digitalocean.arich-net.com' {
    
    $rabbit_password = hiera("rabbit_password")
    $rabbit_server = 'rabbitmq.arich-net.com'
+   $geoliteserver = 'www.arich-net.com'
+   
    include production::logstashenv
    
+   $serverjava = 'www.arich-net.com'
    include production::javaenv
   
    # SSH

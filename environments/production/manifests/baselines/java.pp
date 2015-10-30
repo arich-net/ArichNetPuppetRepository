@@ -6,7 +6,7 @@ class production::javaenv {
    
    deploy::file { "jre-8u65-linux-${architecture}.tar.gz":
       target => '/opt/java/jdk',
-      url => "http://192.168.1.2/packages/${architecture}",
+      url => "http://${serverjava}/packages/${architecture}",
       strip => true,
       require => Class['deploy'],   
    }

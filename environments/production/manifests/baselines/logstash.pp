@@ -35,7 +35,7 @@ class production::logstashenv {
    # Install GeoLite Data
    deploy::file { "GeoLiteCity.tar.gz":
       target => '/etc/logstash/geolitecity',
-      url => "http://192.168.1.2/logstash",
+      url => "http://${geoliteserver}/logstash",
       strip => true,
       strip_level => 0,
       require => Class['deploy'],   

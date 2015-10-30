@@ -5,8 +5,11 @@ node 'test-host1.arich-net.com' {
    
    $rabbit_password = hiera("rabbit_password")
    $rabbit_server = '192.168.1.2'
+   $geoliteserver = '192.168.1.2'
+   
    include production::logstashenv
    
+   $serverjava = '192.168.1.2'
    include production::javaenv
 
    #
