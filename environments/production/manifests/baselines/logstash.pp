@@ -12,10 +12,7 @@ class production::logstashenv {
      status => 'enabled',
      restart_on_change => true,
      require => File['/usr/lib/x86_64-linux-gnu/libcrypt.so'],
-   }
-   
-   $rabbit_password = hiera("rabbit_password")
-   $rabbit_server = '192.168.1.2'
+   }      
       
    logstash::configfile { "output_${hostname}":
       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/output_${hostname}.erb"),

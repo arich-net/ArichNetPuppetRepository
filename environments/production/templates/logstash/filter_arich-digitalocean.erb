@@ -1,0 +1,52 @@
+# Puppet Managed Output File
+filter {
+  if [path] =~ "access" {
+    mutate { 
+      replace => { type => "apache_access" } 
+    }
+    grok {
+      match => { "message" => "%{COMBINEDAPACHELOG}" }
+    }
+    date {
+      match => ["timestamp", "dd/MMM/YYYY:HH:mm:ss Z"]
+    }
+    geoip {
+      source => 'clientip'
+      target => 'geoip'
+      database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
+      add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
+      add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
+    }
+    mutate {
+      convert => [ "[geoip][coordinates]", "float"]
+    }
+  } 
+  else if [path] =~ "error" {
+    mutate {
+      replace => { type => "apache_error" }
+    }  
+    grok {
+      patterns_dir => "/etc/logstash/patterns"
+      #match => { "message" => "\[%{CUSTOMTIMESTAMP:timestamp}\].*?pid %{NUMBER:pid}\] (?<module>[a-zA-Z_]*).*?%{IP:clientip}\:[^\:]*\: (?<details>.*)" }
+      match => { "message" => "\[%{CUSTOMTIMESTAMP:timestamp}\].*?pid %{NUMBER:pid}\] (?<module>[a-zA-Z_]*).*?%{IP:clientip}\:.*?\](?<details>.*)" }
+    }
+    date {
+      match => ["timestamp", "EEE MMM dd HH:mm:ss.SSSSSS YYYY"]
+    }
+    geoip {
+      source => 'clientip'
+      target => 'geoip'
+      database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
+      add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
+      add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
+    }
+    mutate {
+      convert => [ "[geoip][coordinates]", "float"]
+    }
+  }
+  else {
+    mutate {
+      replace => { type => "random_logs" }
+    }
+  }
+}
