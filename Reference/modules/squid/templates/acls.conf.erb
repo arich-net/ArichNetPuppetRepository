@@ -1,7 +1,0 @@
-# Squid ACL configuration
-<% aclarray.sort_by {|key, value| key.to_i}.each do |key, value|
-	if (value['desc'].to_s != "") -%>
-# <%= value['desc'] %>	
-<%	end -%>
-acl <%= value['name'] %> <%= value['type'] %> <%= value['setting'] %>
-<% end -%>

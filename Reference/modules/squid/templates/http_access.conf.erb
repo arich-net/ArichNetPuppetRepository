@@ -1,7 +1,0 @@
-# Squid http_access configuration
-# The http_access AND is acl1 with acl2 or more acls in a single line
-# The http_access OR is acl1 followed by a new line with acl2
-# The default value is the opposite of last line policy which is recommended to be deny all or allow all 
-<% httparray.sort_by {|key, value| key.to_i}.each do |key, value| -%>
-http_access <%= value['policy'] %> <%= value['acl1'] %> <%= value['acl2'] %> <%= value['acl3'] %>
-<% end -%>

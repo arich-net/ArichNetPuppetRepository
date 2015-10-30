@@ -1,5 +1,6 @@
 node 'test-host1.arich-net.com' {
   
+   include production::defaultenv
    include production::aptenv
    include production::logstashenv
    include production::javaenv

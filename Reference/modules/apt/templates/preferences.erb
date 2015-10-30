@@ -1,4 +1,0 @@
-# file managed by puppet
-Package: <%= package %>
-<% if pin == "version" %>Pin: version <%= pin_value %><% else pin == "release" %>Pin: release a=<%= pin_value %><% end %>
-Pin-Priority: <%= priority %>

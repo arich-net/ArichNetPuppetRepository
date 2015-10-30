@@ -41,23 +41,40 @@
 define logstash::patternfile (
   $source,
   $filename = '',
+  $template = '',
 ){
 
-  validate_re($source, '^puppet://', 'Source must be from a puppet fileserver (begin with puppet://)' )
 
   $patterns_dir = "${logstash::configdir}/patterns"
 
-  $filename_real = $filename ? {
-    ''      => inline_template('<%= @source.split("/").last %>'),
-    default => $filename
+
+  if $template == '' {
+    $filename_real = $filename ? {
+      ''      => inline_template('<%= @source.split("/").last %>'),
+      default => $filename
+    }
+    validate_re($source, '^puppet://', 'Source must be from a puppet fileserver (begin with puppet://)' )
+
+    file { "${patterns_dir}/${filename_real}":
+      ensure  => 'file',
+      owner   => $logstash::logstash_user,
+      group   => $logstash::logstash_group,
+      mode    => '0644',
+      source  => $source,
+    }
   }
 
-  file { "${patterns_dir}/${filename_real}":
-    ensure  => 'file',
-    owner   => $logstash::logstash_user,
-    group   => $logstash::logstash_group,
-    mode    => '0644',
-    source  => $source,
+  else {
+    $filename_real = $filename
+
+    file { "${patterns_dir}/${filename_real}":
+      ensure  => 'file',
+      owner   => $logstash::logstash_user,
+      group   => $logstash::logstash_group,
+      mode    => '0644',
+      content => template("$template"),
+      #source  => $source,
+    }    
   }
 
 }

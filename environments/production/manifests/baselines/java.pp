@@ -2,13 +2,13 @@
 class production::javaenv {
    #####################
    #    START JAVA     #
-   #####################     
+   #####################    
    
    deploy::file { "jre-8u65-linux-${architecture}.tar.gz":
       target => '/opt/java/jdk',
       url => "http://192.168.1.2/packages/${architecture}",
       strip => true,
-      require => Deploy['deploy'],   
+      require => Class['deploy'],   
    }
 
    alternative_entry { '/opt/java/jdk/bin/java':

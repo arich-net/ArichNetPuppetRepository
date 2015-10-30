@@ -8,8 +8,10 @@ output {
 #    key => "logstash"
 #  }
   rabbitmq {
-    host => "172.16.0.1"
-    port => "5672"
+    host => "<%= @rabbit_server %>"
+    port => "5671"
+    ssl => true
+    verify_ssl => false
     vhost => "/arich-notes"
     user => "arich-notes"
     password => "<%= @rabbit_password %>"

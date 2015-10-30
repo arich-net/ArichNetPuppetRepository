@@ -82,6 +82,8 @@ define deploy::untar (
   }
   # Uncompress downloaded file
   $_cmd = "${command} ${dl_cmd_options} ${file} -C ${target} ${strip_options} --no-same-owner"
+  notify {"Debug_${file}": name => "$_cmd", }
+
   exec { "untarball_${file}":
     command     => $_cmd,
     subscribe   => File[$target],

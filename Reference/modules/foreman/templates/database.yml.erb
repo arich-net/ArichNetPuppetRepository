@@ -1,8 +1,0 @@
-# Foreman database.yml
-production:
-  adapter: mysql
-  database: <%= scope.lookupvar("foreman::params::storeconfig_db") %>
-  username: <%= scope.lookupvar("foreman::params::storeconfig_dbuser") %>
-  password: <%= scope.lookupvar("foreman::params::storeconfig_dbpasswd") %>
-  host: localhost
-  socket: "/var/run/mysqld/mysqld.sock"
