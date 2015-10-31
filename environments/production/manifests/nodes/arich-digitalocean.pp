@@ -11,6 +11,12 @@ node 'arich-digitalocean.arich-net.com' {
    
    $serverjava = 'www.arich-net.com'
    include production::javaenv
+   
+   @user { 'logstash':
+      ensure => 'present',
+      groups => ['logstash', 'adm'],
+      require => Class['production::logstashenv'],
+   }
   
    # SSH
    class { 'ssh':
