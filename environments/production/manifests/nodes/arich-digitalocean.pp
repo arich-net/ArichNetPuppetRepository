@@ -15,7 +15,7 @@ node 'arich-digitalocean.arich-net.com' {
    @user { 'logstash':
       ensure => 'present',
       groups => ['logstash', 'adm'],
-      require => Class['production::logstashenv'],
+      require => Class['logstash'],
    }
   
    # SSH
