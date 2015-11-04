@@ -8,4 +8,10 @@ input {
     exclude => "*.gz"
     tags => ["apache"]
   }
+  file {
+    path => "/var/log/auth.log"
+    start_position => beginning
+    #sincedb_path => "/dev/null"
+    tags => ["syslog"]
+  }  
 }
