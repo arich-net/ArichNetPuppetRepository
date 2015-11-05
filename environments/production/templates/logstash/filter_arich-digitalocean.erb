@@ -56,13 +56,28 @@ filter {
       replace => { type => "syslog_data" }    
     }
     grok {
+      break_on_match => true
       patterns_dir => "/etc/logstash/patterns"
-      match => { "message" => "%{SYSLOGTIMESTAMP:timestamp} %{HOSTNAME:hostname} (?<module>[\w]*)\[(?<PID>[0-9]*)\]: (?<message>.*)" }
+      match => { "message" =>  [
+        "%{SYSLOGTIMESTAMP:timestamp} %{HOSTNAME:hostname} (?<module>[\w]*)\[(?<PID>[0-9]*)\]: (?<message>.*?sshd.*?rhost=(%{IP:remoteIP}).*)",
+        "%{SYSLOGTIMESTAMP:timestamp} %{HOSTNAME:hostname} (?<module>[\w]*)\[(?<PID>[0-9]*)\]: (?<message>.*?(?i)from(?-i).*?(%{IP:remoteIP}).*)",
+        "%{SYSLOGTIMESTAMP:timestamp} %{HOSTNAME:hostname} (?<module>[\w]*)\[(?<PID>[0-9]*)\]: (?<message>.*)"
+      ] }
       add_field => [ "received_at", "%{@timestamp}" ]
       add_field => [ "received_from", "%{hostname}" ]
     }
     date {
       match => [ "timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
+    geoip {
+      source => 'remoteIP'
+      target => 'geoip'
+      database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
+      add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
+      add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
+    }
+    mutate {
+      convert => [ "[geoip][coordinates]", "float"]
     }
   }
   else {
