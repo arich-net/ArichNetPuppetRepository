@@ -87,10 +87,10 @@ class Hiera
           query = "Pod?name=#{$1}"
         when /superpod\/([^\/]*)\/pod\/([^\/]*)$/             # superpod/%{superpod}/pod/%{pod}
           query = "Superpod?name=#{$1}&Pod?name=#{$2}"
-        when /rabbitmq\/([^\/]*)\/password$/                  # rabbitmq/%{hostname}/password
-          query = "hiera/rabbitmq/password?hostname=#{$1}"
+        when /service\/([^\/]*)\/data$/                       # service/%{hostname}/data
+          query = "hiera/service/data?hostname=#{$1}"
         else
-          debug("Got a query we can't handle yet!")
+          debug("Got a query we can't handle yet! #{source}")
           return {}
         end
 

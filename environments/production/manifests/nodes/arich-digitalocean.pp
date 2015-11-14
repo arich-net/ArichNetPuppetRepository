@@ -3,7 +3,7 @@ node 'arich-digitalocean.arich-net.com' {
    include production::defaultenv
    include production::aptenv
    
-   $rabbit_password = hiera("rabbit_password")
+   $rabbit_password = hiera("rabbitmq_password")
    $rabbit_server = 'rabbitmq.arich-net.com'
    $geoliteserver = 'www.arich-net.com'
    

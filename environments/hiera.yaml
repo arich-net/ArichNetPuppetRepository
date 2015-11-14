@@ -11,5 +11,5 @@
   :port: 18080
   :api: '/arichrest/api'
 :hierarchy:
-  - rabbitmq/%{hostname}/password
+  - service/%{hostname}/data
   - common
