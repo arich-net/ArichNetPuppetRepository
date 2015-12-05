@@ -11,13 +11,13 @@ class production::aptenv {
    }
  
    case $lsbdistid {
-      'Ubuntu': { $location = 'http://es.archive.ubuntu.com/ubuntu'  }
+      'Ubuntu': { $location = 'http://mirror.netcologne.de/ubuntu'  }
       'Debian': { $location = 'http://ftp.es.debian.org/debian'  }
    }
 
    apt::source { 'ubuntu':
       location => $location,
-      repos => 'main restricted',
+      repos => 'main restricted universe',
       include => {
          'deb' => true,
       }
