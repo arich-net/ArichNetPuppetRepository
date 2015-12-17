@@ -1,0 +1,15 @@
+---
+<%=
+mco_facts = scope.to_hash.reject do |k,v|
+        k.to_s =~ /(uptime|timestamp|free|require|ec2_metadata)/
+end
+if RUBY_VERSION =~ /^1\.8/
+  mco_yaml = String.new
+  mco_facts.each_key.sort.map do |fact|
+    mco_yaml << "  #{fact}: \"#{mco_facts[fact].to_s.gsub('"', '\"')}\"\n"
+  end
+else
+  mco_yaml = mco_facts.to_yaml
+end
+mco_yaml
+-%>

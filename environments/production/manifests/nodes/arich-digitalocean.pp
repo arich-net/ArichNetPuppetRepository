@@ -25,4 +25,13 @@ node 'arich-digitalocean.arich-net.com' {
       sshd_config_banner => '/etc/banner',
       sshd_banner_content => "Welcome to server ${fqdn} \n",
    }
+
+   # Mcollective
+   class { '::mcollective':
+      broker_host       => 'mcollective.arich-net.com',
+      broker_port       => '61614',
+      security_provider => 'ssl',
+      use_node          => true,
+      use_client        => true,
+   }
 }
