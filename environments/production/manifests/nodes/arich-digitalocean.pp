@@ -34,4 +34,7 @@ node 'arich-digitalocean.arich-net.com' {
       use_node          => true,
       use_client        => true,
    }
+   mcollective::plugin { 'rabbitmq':
+      ensure => present,
+   }
 }
