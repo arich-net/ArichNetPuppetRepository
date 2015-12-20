@@ -40,6 +40,21 @@ class production::aptenv {
       },
    }
    
+   # APT Puppetlabs 
+   apt::source { 'puppetlabs':
+      comment  => 'This is the Puppetlabs Mirror',
+      location => 'http://apt.puppetlabs.com',
+      release  => $lsbdistcodename,
+      repos    => 'PC1',
+      key      => {
+         'id'     => '47B320EB4C7C375AA9DAE1A01054B7A24BD6EC30',
+         'server' => 'pgp.mit.edu',
+      },
+      include  => {
+         'deb' => true,
+      },
+   }   
+   
    ####################
    #      END APT     #
    ####################  
