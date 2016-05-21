@@ -42,7 +42,7 @@ define mcollective::plugin (
   }
 
   $old_package = $::osfamily ? {
-    'Debian' => "mcollective-agent-${old_base_name}",
+    'Debian' => "mcollective-plugins-${old_base_name}",
     'RedHat' => "mcollective-plugins-${old_base_name}",
   }
 

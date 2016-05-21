@@ -33,8 +33,13 @@ node 'arich-digitalocean.arich-net.com' {
       security_provider => 'ssl',
       use_node          => true,
       use_client        => true,
+      broker_ssl_cert   => '/etc/mcollective/ssl/server/arich-digitalocean.mcollective.arich-net.com.crt',
+      broker_ssl_key    => '/etc/mcollective/ssl/server/arich-digitalocean.mcollective.arich-net.com.key',
+      broker_ssl_ca     => '/etc/mcollective/ssl/server/ca_bundle.crt',
+      broker_user       => 'mcollective',
+      broker_password   => 'Ak8TCETHkhpS76j2oKCH',
    }
-   mcollective::plugin { 'rabbitmq':
+   mcollective::plugin { 'stomputil':
       ensure => present,
    }
 }
