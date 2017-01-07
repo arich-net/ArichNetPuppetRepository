@@ -24,6 +24,9 @@ node 'arich-digitalocean.arich-net.com' {
       sshd_config_allowusers => ['root','arich'],
       sshd_config_banner => '/etc/banner',
       sshd_banner_content => "Welcome to server ${fqdn} \n",
+      sshd_config_challenge_resp_auth => 'no',
+      sshd_password_authentication => 'no',
+      sshd_use_pam_real => 'no',
    }
 
    # Mcollective
