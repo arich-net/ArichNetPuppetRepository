@@ -7,7 +7,7 @@
 :json:
   :datadir: /opt/puppetmaster/codedir/hieradata
 :rest:
-  :server: '192.168.1.14'
+  :server: '127.0.0.1'
   :port: 18080
   :api: '/arichrest/api'
 :hierarchy:
