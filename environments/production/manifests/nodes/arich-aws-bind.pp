@@ -26,7 +26,7 @@ node 'arich-aws-bind.arich-net.com' {
       sshd_banner_content => "Welcome to server ${fqdn} \n",
       sshd_config_challenge_resp_auth => 'no',
       sshd_password_authentication => 'no',
-      sshd_use_pam => 'no',
+      sshd_use_pam => 'yes',
    }
 
    # Mcollective
