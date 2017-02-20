@@ -14,7 +14,7 @@ node 'arich-aws-bind.arich-net.com' {
    
    user { 'logstash':
       ensure => 'present',
-      groups => ['logstash', 'adm'],
+      groups => ['logstash', 'adm', 'bind'],
       require => Class['logstash'],
    }
   
