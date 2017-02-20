@@ -3,20 +3,20 @@ node 'arich-aws-bind.arich-net.com' {
    include production::defaultenv
    include production::aptenv
    
-   #$rabbit_password = hiera("rabbitmq_password")
-   #$rabbit_server = 'rabbitmq.ipv6.arich-net.com'
-   #$geoliteserver = 'www.arich-net.com'
+   $rabbit_password = hiera("rabbitmq_password")
+   $rabbit_server = 'rabbitmq.ipv6.arich-net.com'
+   $geoliteserver = 'www.arich-net.com'
    
-   #include production::logstashenv
+   include production::logstashenv
    
-   #$serverjava = 'www.arich-net.com'
-   #include production::javaenv
+   $serverjava = 'www.arich-net.com'
+   include production::javaenv
    
-   #user { 'logstash':
-   #   ensure => 'present',
-   #   groups => ['logstash', 'adm'],
-   #   require => Class['logstash'],
-   #}
+   user { 'logstash':
+      ensure => 'present',
+      groups => ['logstash', 'adm'],
+      require => Class['logstash'],
+   }
   
    # SSH
    class { 'ssh':

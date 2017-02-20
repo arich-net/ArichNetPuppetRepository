@@ -1,0 +1,32 @@
+# Puppet Managed Output File
+filter {
+  mutate {
+    replace => { type => "bind9_querylog" }
+  }
+  grok {
+    match => { "message" => "%{BIND9}" }
+  }
+  date {
+    match => ["timestamp", "dd-MMM-YYYY HH:mm:ss.SSS"]
+  }
+  geoip {
+    source => 'clientip'
+    target => 'geoip'
+    database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
+    add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
+    add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
+  }
+  mutate {
+    convert => [ "[geoip][coordinates]", "float"]
+  }
+  ruby {
+    code => "
+      event['recursion'] = event['dnsflags'].include? '+'
+      event['signed'] = event['dnsflags'].include? 'S'
+      event['edns0'] = event['dnsflags'].include? 'E'
+      event['dnssec'] = event['dnsflags'].include? 'D'
+      event['checkdisabled'] = event['dnsflags'].include? 'C'
+      event['tcp'] = event['dnsflags'].include? 'T'
+    "
+  }
+}

@@ -1,0 +1,10 @@
+# Puppet Managed Output File
+input {
+  file {
+    path => "/var/log/bind/querylog"
+    start_position => beginning
+    #sincedb_path => "/dev/null"
+    exclude => "*.gz"
+    tags => ["bind9"]
+  }
+}
