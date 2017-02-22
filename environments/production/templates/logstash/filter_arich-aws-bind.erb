@@ -2,8 +2,17 @@
 filter {
   mutate {
     replace => { type => "bind9_querylog" }
+    add_field => {
+       "[flags][recursion]" => 0
+       "[flags][signed]" => 0
+       "[flags][edns0]" => 0
+       "[flags][dnssec]" => 0
+       "[flags][checkdisabled]" => 0
+       "[flags][tcprequest]" => 0
+    }    
   }
   grok {
+    patterns_dir => "/etc/logstash/patterns/"
     match => { "message" => "%{BIND9}" }
   }
   date {
@@ -21,12 +30,12 @@ filter {
   }
   ruby {
     code => "
-      event['recursion'] = event['dnsflags'].include? '+'
-      event['signed'] = event['dnsflags'].include? 'S'
-      event['edns0'] = event['dnsflags'].include? 'E'
-      event['dnssec'] = event['dnsflags'].include? 'D'
-      event['checkdisabled'] = event['dnsflags'].include? 'C'
-      event['tcp'] = event['dnsflags'].include? 'T'
+      event['flags']['recursion'] = event['dnsflags'].include?('+') ? 1 : 0
+      event['flags']['signed'] = event['dnsflags'].include?('S') ? 1 : 0
+      event['flags']['edns0'] = event['dnsflags'].include?('E') ? 1 : 0
+      event['flags']['dnssec'] = event['dnsflags'].include?('D') ? 1 : 0
+      event['flags']['checkdisabled'] = event['dnsflags'].include?('C') ? 1 : 0
+      event['flags']['tcprequest'] = event['dnsflags'].include?('T') ? 1 : 0
     "
   }
 }
