@@ -46,6 +46,12 @@ class Hiera
 
           data = restquery(key, source)
 
+          data.each do |key1, value1|
+            debug("Result: #{key1} #{value1}")
+          end
+
+          debug ("Result include #{key}: #{data.include?(key)}")
+
           # if we want to support array responses, this will have to be more intelligent
           next unless data.include?(key)
           debug ("Key '#{key}' found in REST response, Passing answer to hiera")
@@ -98,6 +104,7 @@ class Hiera
 
         request = Net::HTTP::Get.new("#{Config[:rest][:api]}/#{query}")
         response = ActiveSupport::JSON.decode(@http.request(request).body)
+
 
         # do we want to support array responses? It's built in to Hiera; see above
         return response['success'] ? response['data'][0] : {}
