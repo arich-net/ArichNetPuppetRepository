@@ -4,12 +4,12 @@ node 'test-host1.arich-net.com' {
    include production::aptenv
    
    $rabbit_password = hiera("rabbitmq_password")
-   $rabbit_server = '192.168.1.2'
-   $geoliteserver = '192.168.1.2'
+   $rabbit_server = '192.168.1.10'
+   $geoliteserver = '192.168.1.11'
    
    include production::logstashenv
    
-   $serverjava = '192.168.1.2'
+   $serverjava = '192.168.1.11'
    include production::javaenv
 
    #
