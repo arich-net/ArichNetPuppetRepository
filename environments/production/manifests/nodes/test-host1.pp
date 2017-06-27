@@ -11,7 +11,17 @@ node 'test-host1.arich-net.com' {
    
    $serverjava = '192.168.1.11'
    include production::javaenv
-
+   
+   class { '::mcollective':
+      broker_host       => '192.168.1.10',
+      broker_port       => '61613',
+      broker_ssl        => false,
+      security_provider => 'psk',
+      security_secret   => 'PASSWORD',
+      use_node          => true,
+      use_client        => true,
+   }
+   
    #
    # SSH
    #
