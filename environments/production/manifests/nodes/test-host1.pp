@@ -15,6 +15,9 @@ node 'test-host1.arich-net.com' {
    class { '::mcollective':
       broker_host       => '192.168.1.10',
       broker_port       => '61613',
+      broker_vhost      => '/mcollective',
+      broker_user       => 'mcollective',
+      broker_password   => $rabbit_password, 
       broker_ssl        => false,
       security_provider => 'psk',
       security_secret   => 'PASSWORD',
