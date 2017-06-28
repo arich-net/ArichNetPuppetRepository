@@ -22,7 +22,7 @@ node 'test-host1.arich-net.com' {
       security_provider => 'psk',
       security_secret   => 'PASSWORD',
       use_node          => true,
-      use_client        => true,
+      use_client        => false,
    }
    
    #
