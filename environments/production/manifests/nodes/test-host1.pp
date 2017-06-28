@@ -12,6 +12,10 @@ node 'test-host1.arich-net.com' {
    $serverjava = '192.168.1.11'
    include production::javaenv
    
+   class { '::ntp':
+      servers => [ '192.168.2.254' ],
+   }
+   
    class { '::mcollective':
       broker_host       => '192.168.1.10',
       broker_port       => '61613',
