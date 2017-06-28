@@ -23,6 +23,8 @@ node 'test-host1.arich-net.com' {
       security_secret   => 'PASSWORD',
       use_node          => true,
       use_client        => false,
+      collectives       => ['arichcollective'],
+      main_collective   => 'arichcollective'
    }
    
    #
