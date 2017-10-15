@@ -45,8 +45,9 @@ class production::logstashenv(
    }
    
    # Include lookup tables if needed   
-   if ($lookup == true) {
-     file { "/etc/logstash/lookup-${lookuptable}.csv":
+   if ($lookup) {
+     notify { "Using template /opt/puppetmaster/codedir/environments/${environment}/templates/logstash/lookup-${lookuptable}_${hostname}.erb": }
+     file { "/etc/logstash/conf.d/lookup-${lookuptable}.csv":
        ensure => file,
        content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/lookup-${lookuptable}_${hostname}.erb")
      }

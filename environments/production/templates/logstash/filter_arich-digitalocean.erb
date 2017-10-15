@@ -24,7 +24,7 @@ filter {
       <% if @lookup %>      
       translate {
         field => 'request'
-        dictionary_path => '/etc/logstash/lookup-<%= @lookuptable %>.csv'
+        dictionary_path => '/etc/logstash/conf.d/lookup-<%= @lookuptable %>.csv'
         destination => 'pagina'
         fallback => 'no-matched-pag'
         regex => true
