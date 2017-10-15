@@ -33,7 +33,9 @@ class production::logstashenv(
       source => "puppet:///path/to/extra_patterns",
       filename => "patterns_${hostname}",
       template => "/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/patterns_${hostname}.erb",
-   }     
+   }
+
+   logstash::plugin { 'logstash-filter-translate': }
    
    # Install GeoLite Data
    deploy::file { "GeoLiteCity.tar.gz":
