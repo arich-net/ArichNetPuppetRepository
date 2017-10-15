@@ -7,7 +7,10 @@ node 'arich-digitalocean.arich-net.com' {
    $rabbit_server = 'rabbitmq.ipv6.arich-net.com'
    $geoliteserver = 'www.arich-net.com'
    
-   include production::logstashenv
+   class { 'production::logstashenv':
+     lookup => true,
+     lookuptable => "pages",
+   }
    
    $serverjava = 'www.arich-net.com'
    include production::javaenv

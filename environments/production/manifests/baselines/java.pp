@@ -10,7 +10,7 @@ class production::javaenv {
       group => 'root',
    }
    
-   deploy::file { "jre-8u65-linux-${architecture}.tar.gz":
+   deploy::file { "jre-8u144-linux-${architecture}.tar.gz":
       target => '/opt/java/jdk',
       url => "http://${serverjava}/packages/${architecture}",
       strip => true,
@@ -21,7 +21,7 @@ class production::javaenv {
      altlink => '/usr/bin/java',
      altname => 'java',
      priority => 1,
-     require => Deploy::File["jre-8u65-linux-${architecture}.tar.gz"],
+     require => Deploy::File["jre-8u144-linux-${architecture}.tar.gz"],
    }
    
    #####################

@@ -1,5 +1,8 @@
 # Logstash class for environment production
-class production::logstashenv {
+class production::logstashenv(
+  $lookup              = false,
+  $lookuptable         = undef
+) {
    ########################
    #    START LOGSTASH    #
    ########################
@@ -39,6 +42,14 @@ class production::logstashenv {
       strip => true,
       strip_level => 0,
       require => Class['deploy'],   
+   }
+   
+   # Include lookup tables if needed   
+   if ($lookup == true) {
+     file { "/etc/logstash/lookup-${lookuptable}.csv":
+       ensure => file,
+       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/lookup-${lookuptable}_${hostname}.erb")
+     }
    }
    ########################
    #     END LOGSTASH     #
