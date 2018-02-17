@@ -3,7 +3,8 @@ filter {
   if "apache" in [tags] {
     if [path] =~ "access" {
       mutate { 
-        replace => { type => "apache_access" } 
+        replace => { type => "doc" }
+        add_field => { "type" => "apache_access" } 
       }
       grok {
         match => { "message" => "%{COMBINEDAPACHELOG}" }
@@ -33,7 +34,8 @@ filter {
     } 
     else if [path] =~ "error" {
       mutate {
-        replace => { type => "apache_error" }
+        replace => { type => "doc" }
+        add_field => { "type" => "apache_error" } 
       }  
       grok {
         patterns_dir => "/etc/logstash/patterns"
