@@ -14,7 +14,7 @@ filter {
       geoip {
         source => 'clientip'
         target => 'geoip'
-        database => '/etc/logstash/geolitecity/GeoLite2-City.mmdb'
+        database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
         add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
         add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
       }
@@ -24,7 +24,7 @@ filter {
       <% if @lookup %>      
       translate {
         field => 'request'
-        dictionary_path => '/etc/logstash/conf.d/lookup-<%= @lookuptable %>.csv'
+        dictionary_path => '/etc/logstash/lookups/lookup-<%= @lookuptable %>.yaml'
         destination => 'pagina'
         fallback => 'no-matched-pag'
         regex => true
@@ -46,7 +46,7 @@ filter {
       geoip {
         source => 'clientip'
         target => 'geoip'
-        database => '/etc/logstash/geolitecity/GeoLite2-City.mmdb'
+        database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
         add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
         add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
       }
@@ -81,7 +81,7 @@ filter {
     geoip {
       source => 'remoteIP'
       target => 'geoip'
-      database => '/etc/logstash/geolitecity/GeoLite2-City.mmdb'
+      database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
       add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
       add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
     }

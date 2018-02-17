@@ -35,7 +35,7 @@ class production::logstashenv(
       template => "/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/patterns_${hostname}.erb",
    }
 
-   logstash::plugin { 'logstash-filter-translate': }
+   #logstash::plugin { 'logstash-filter-translate': }
    
    # Install GeoLite Data
    deploy::file { "GeoLiteCity.tar.gz":
@@ -49,9 +49,13 @@ class production::logstashenv(
    # Include lookup tables if needed   
    if ($lookup) {
      notify { "Using template /opt/puppetmaster/codedir/environments/${environment}/templates/logstash/lookup-${lookuptable}_${hostname}.erb": }
-     file { "/etc/logstash/conf.d/lookup-${lookuptable}.csv":
+     file { '/etc/logstash/lookups':
+       ensure => 'directory',
+     }
+     file { "/etc/logstash/lookups/lookup-${lookuptable}.yaml":
        ensure => file,
-       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/lookup-${lookuptable}_${hostname}.erb")
+       content => template("/opt/puppetmaster/codedir/environments/${environment}/templates/logstash/lookup-${lookuptable}_${hostname}.erb"),
+       require => File["/etc/logstash/lookups"],
      }
    }
    ########################
