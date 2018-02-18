@@ -3,7 +3,7 @@ filter {
   if "apache" in [tags] {
     if [path] =~ "access" {
       mutate { 
-        replace => { type => "doc" }
+        replace => { "_type" => "doc" }
         add_field => { "type" => "apache_access" } 
       }
       grok {
@@ -34,7 +34,7 @@ filter {
     } 
     else if [path] =~ "error" {
       mutate {
-        replace => { type => "doc" }
+        replace => { "_type" => "doc" }
         add_field => { "type" => "apache_error" } 
       }  
       grok {
