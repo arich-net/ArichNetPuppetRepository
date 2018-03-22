@@ -1,0 +1,41 @@
+# Puppet Managed Output File
+filter {
+  mutate {
+    replace => { type => "bind9_querylog" }
+    add_field => {
+       "[flags][recursion]" => 0
+       "[flags][signed]" => 0
+       "[flags][edns0]" => 0
+       "[flags][dnssec]" => 0
+       "[flags][checkdisabled]" => 0
+       "[flags][tcprequest]" => 0
+    }    
+  }
+  grok {
+    patterns_dir => "/etc/logstash/patterns/"
+    match => { "message" => "%{BIND9}" }
+  }
+  date {
+    match => ["timestamp", "dd-MMM-YYYY HH:mm:ss.SSS"]
+  }
+  geoip {
+    source => 'clientip'
+    target => 'geoip'
+    database => '/etc/logstash/geolitecity/GeoLiteCity.dat'
+    add_field => [ '[geoip][coordinates]', '%{[geoip][longitude]}' ]
+    add_field => [ '[geoip][coordinates]', '%{[geoip][latitude]}'  ] 
+  }
+  mutate {
+    convert => [ "[geoip][coordinates]", "float"]
+  }
+  ruby {
+    code => "
+      event['flags']['recursion'] = event['dnsflags'].include?('+') ? 1 : 0
+      event['flags']['signed'] = event['dnsflags'].include?('S') ? 1 : 0
+      event['flags']['edns0'] = event['dnsflags'].include?('E') ? 1 : 0
+      event['flags']['dnssec'] = event['dnsflags'].include?('D') ? 1 : 0
+      event['flags']['checkdisabled'] = event['dnsflags'].include?('C') ? 1 : 0
+      event['flags']['tcprequest'] = event['dnsflags'].include?('T') ? 1 : 0
+    "
+  }
+}
